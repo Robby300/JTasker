@@ -6,7 +6,7 @@ CREATE TABLE "user"
     "email"    VARCHAR(100)
 );
 
-CREATE TABLE "task"
+CREATE TABLE "todo"
 (
     "id"          BIGSERIAL PRIMARY KEY,
     "user_id"     BIGINT,
@@ -15,8 +15,8 @@ CREATE TABLE "task"
     "created_on"  TIMESTAMP,
     "deadline"    TIMESTAMP,
     "is_done"     BOOLEAN,
-    "parent_task" BIGINT
+    parent_todo BIGINT
 );
 
-ALTER TABLE "task"
+ALTER TABLE "todo"
     ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
