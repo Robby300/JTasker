@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ToDoesRepository {
 
-    void save(ToDo toDo);
+    ToDo save(ToDo toDo);
 
     List<ToDo> findAllByUserId(Long userId);
 
