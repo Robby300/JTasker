@@ -6,8 +6,45 @@ public class User {
     private String password;
     private String email;
 
-    public User() {
+    public User(Builder builder) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
     }
+
+    public static class Builder {
+
+        private long id;
+        private String userName;
+        private String password;
+        private String email;
+
+        public Builder id(long id) {
+            this.userName = userName;
+            return this;
+        }
+
+        public Builder userName(String userName) {
+            this.userName = userName;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
+    }
+
 
     public long getId() {
         return id;

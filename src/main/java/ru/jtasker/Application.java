@@ -1,12 +1,12 @@
 package ru.jtasker;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.jdbc.core.JdbcTemplate;
+
 
 import javax.sql.DataSource;
+import javax.swing.*;
 
 public class Application {
-    DataSource dataSource = new DataSource();
+    DataSource dataSource = new DataSource()
 
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
