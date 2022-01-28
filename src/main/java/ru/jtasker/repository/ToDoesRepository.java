@@ -11,4 +11,6 @@ public interface ToDoesRepository {
     List<ToDo> findByUserId();
 
     List<ToDo> findByUserIdNotDone();
+
+    List<ToDo> findByUserIdDone();
 }
