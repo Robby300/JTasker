@@ -10,7 +10,7 @@ public interface ToDoesRepository {
 
     List<ToDo> findAllByUserId(Long userId);
 
-    List<ToDo> findByUserIdNotDone();
+    List<ToDo> findByUserIdNotDone(Long userId);
 
-    List<ToDo> findByUserIdDone();
+    List<ToDo> findByUserIdDone(Long userId);
 }
