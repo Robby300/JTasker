@@ -6,11 +6,14 @@ public class User {
     private String password;
     private String email;
 
+    public User() {
+    }
+
     public User(Builder builder) {
-        this.id = id;
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
+        this.id = builder.id;
+        this.userName = builder.userName;
+        this.password = builder.password;
+        this.email = builder.email;
     }
 
     public static class Builder {
@@ -21,7 +24,7 @@ public class User {
         private String email;
 
         public Builder id(long id) {
-            this.userName = userName;
+            this.id = id;
             return this;
         }
 

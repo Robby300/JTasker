@@ -1,17 +1,13 @@
 package ru.jtasker;
 
 
-
-import javax.sql.DataSource;
-import javax.swing.*;
+import ru.jtasker.domain.User;
 
 public class Application {
-    DataSource dataSource = new DataSource()
-
-    JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        User user = new User.Builder().id(1L).userName("Vasya").email("Sobaka@mail.ru").password("123").build();
+        int i = 0;
     }
+
 }
