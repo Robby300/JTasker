@@ -8,7 +8,7 @@ public interface ToDoesRepository {
 
     void save(ToDo toDo);
 
-    List<ToDo> findByUserId();
+    List<ToDo> findAllByUserId();
 
     List<ToDo> findByUserIdNotDone();
 
