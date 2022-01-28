@@ -11,4 +11,6 @@ public interface ToDoesRepository {
     void save(ToDo toDo);
 
     List<ToDo> findByUser();
+
+    List<ToDo> findByUserNotDone();
 }
