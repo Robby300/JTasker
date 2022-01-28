@@ -13,7 +13,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="JTasker" options="-parameters" />
+      <module name="JTasker" options="" />
     </option>
   </component>
 </project>

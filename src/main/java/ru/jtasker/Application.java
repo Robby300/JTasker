@@ -7,7 +7,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
-@SpringBootApplication
+
 public class Application {
     DataSource dataSource = new DriverManagerDataSource();
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
