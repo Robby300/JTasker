@@ -10,16 +10,10 @@ import java.sql.Statement;
 public class BaseTable {
     public static final String DB_URL = "jdbc:h2:mem:/";
     String tableName;       // Имя таблицы
-    Connection connection;
+    Connection connection = DriverManager.getConnection(DB_URL);
 
-    {
-        try {
-            connection = DriverManager.getConnection(DB_URL);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public BaseTable() throws SQLException {
     }
-
 
     // Закрытие
     public void close() {
