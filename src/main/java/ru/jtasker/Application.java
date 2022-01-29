@@ -21,25 +21,27 @@ import java.util.Scanner;
 //@Component
 public class Application {
 
-    public static final String DB_URL = "jdbc:h2:mem:jpa_jbd";
-    public static final String DB_Driver = "org.h2.Driver";
+    public static final String DB_URL = "jdbc:sqlite::memory:";
+    public static final String DB_Driver = "org.sqlite.JDBC";
     // SQL
     public static final String sql = "CREATE TABLE USERS(" +
             "id BIGSERIAL PRIMARY KEY ," +
             "username VARCHAR(255)," +
             "pass VARCHAR(255)," +
             "email VARCHAR(100))";
-    public static final String sqlInsert = "INSERT INTO USERS(username, pass, email) VALUES ('Ivan', '123', 'Ivan@mail.ru')";
+    public static String createTableSQL = "create table users (\r\n" + "  id  int(3) primary key,\r\n" +
+            "  name varchar(20),\r\n" + "  email varchar(20),\r\n" + "  country varchar(20),\r\n" +
+            "  password varchar(20)\r\n" + "  );";
+    public static final String sqlInsert = "INSERT INTO USERS(username, pass, email) VALUES ('Ivan', '123', 'Ivan@mail.ru');";
     public static final String sqlQuery = "select * from USERS";
     public static void main(String[] args) {
 
-        try (
-                Connection connection = DriverManager.getConnection(DB_URL);
-                Scanner scanner = new Scanner(System.in);
-                Statement statement = connection.createStatement();
-        ) {
-
+        try {
             Class.forName(DB_Driver);
+            Connection connection = DriverManager.getConnection(DB_URL, "sa", "");
+            Scanner scanner = new Scanner(System.in);
+            Statement statement = connection.createStatement();
+
             System.out.println(statement.execute(sql)); // Выполняем statement - sql команду
             System.out.println(statement.execute(sqlInsert));
             System.out.println("Checkpoint");
@@ -50,7 +52,7 @@ public class Application {
             System.out.println("проблема с подключением к БД");
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            System.out.println("проблема с драйвером");
+            System.out.println("проблема с драйвером БД");
             e.printStackTrace();
         }
 

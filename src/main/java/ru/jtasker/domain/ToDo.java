@@ -146,4 +146,18 @@ public class ToDo {
     public void setParentToDoId(Long parentToDoId) {
         this.parentToDoId = parentToDoId;
     }
+
+    @Override
+    public String toString() {
+        return "ToDo{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", createdOn=" + createdOn +
+                ", deadline=" + deadline +
+                ", isDone=" + isDone +
+                ", parentToDoId=" + parentToDoId +
+                '}';
+    }
 }
