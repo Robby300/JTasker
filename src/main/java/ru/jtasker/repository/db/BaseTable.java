@@ -1,21 +1,28 @@
 package ru.jtasker.repository.db;
 
-import ru.jtasker.Application;
+import org.springframework.stereotype.Component;
 
 import java.io.Closeable;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 // Сервисный родительский класс, куда вынесена реализация общих действий для всех таблиц
-public class BaseTable implements Closeable {
-    Connection connection;  // JDBC-соединение для работы с таблицей
-    String tableName;       // Имя таблицы
 
-    BaseTable(String tableName) throws SQLException { // Для реальной таблицы передадим в конструктор её имя
-        this.tableName = tableName;
-        this.connection = Application.getConnection(); // Установим соединение с СУБД для дальнейшей работы
+public class BaseTable {
+    public static final String DB_URL = "jdbc:h2:mem:/";
+    String tableName;       // Имя таблицы
+    Connection connection;
+
+    {
+        try {
+            connection = DriverManager.getConnection(DB_URL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
 
     // Закрытие
     public void close() {
@@ -37,19 +44,14 @@ public class BaseTable implements Closeable {
             System.out.println(description);
     }
 
-    ;
-
     void executeSqlStatement(String sql) throws SQLException {
         executeSqlStatement(sql, null);
     }
 
-    ;
-
-
     // Активизация соединения с СУБД, если оно не активно.
     void reopenConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
-            connection = Application.getConnection();
+            connection = DriverManager.getConnection(DB_URL);
         }
     }
 }

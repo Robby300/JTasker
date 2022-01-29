@@ -5,7 +5,6 @@ import java.sql.SQLException;
 public class UserTable extends BaseTable implements TableOperations {
 
     public UserTable() throws SQLException {
-        super("user");
     }
 
     @Override

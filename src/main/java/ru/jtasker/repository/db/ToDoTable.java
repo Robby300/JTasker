@@ -1,11 +1,13 @@
 package ru.jtasker.repository.db;
 
+import org.springframework.stereotype.Component;
+
 import java.sql.SQLException;
 
+@Component
 public class ToDoTable extends BaseTable implements TableOperations {
 
     public ToDoTable() throws SQLException {
-        super("todo");
     }
 
     @Override

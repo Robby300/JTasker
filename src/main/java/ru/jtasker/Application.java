@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 import ru.jtasker.config.AppConfig;
+import ru.jtasker.domain.ToDo;
 import ru.jtasker.repository.ToDoesRepositoryImpl;
 import ru.jtasker.repository.db.ToDoTable;
 import ru.jtasker.repository.db.UserTable;
@@ -12,27 +13,29 @@ import ru.jtasker.repository.db.UserTable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 @Component
 public class Application {
     ToDoesRepositoryImpl toDoesRepository;
-    public static final String DB_URL = "jdbc:h2:mem:/";
+
     // Таблицы
     UserTable userTable;
     ToDoTable toDoTable;
     //ToDoesRepositoryImpl toDoesRepository;
-
-    public Application(ToDoesRepositoryImpl toDoesRepository) throws SQLException {
+    public Application() throws SQLException {
         userTable = new UserTable();
         toDoTable = new ToDoTable();
+    }
+
+
+    public Application(ToDoesRepositoryImpl toDoesRepository) {
         this.toDoesRepository = toDoesRepository;
     }
 
     // соединение с БД
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL);
-    }
+
 
     // Создание всех таблиц
     public void createTablesAndForeignKeys() throws SQLException {
@@ -52,13 +55,15 @@ public class Application {
         String command = scanner.nextLine();
         switch (command) {
             case "1":
-                System.out.println("Вы выбрали создание задачи");
+                createAndSaveToDo(scanner);
                 break;
             case "2":
                 System.out.println("Ваши незавершённые задачи:");
+                toDoesRepository.findAllNotFinishedTasksByUserId(1L);
                 break;
             case "3":
                 System.out.println("Ваши завершённые задачи:");
+                toDoesRepository.findAllFinishedTasksByUserId(1L);
                 break;
             case "4":
                 System.out.println("GoodBye...");
@@ -67,6 +72,43 @@ public class Application {
                 System.out.println("Введите число от 1 до 4х");
                 break;
         }
+    }
+
+    private void createAndSaveToDo(Scanner scanner) {
+        System.out.println("Вы выбрали создание задачи:");
+        System.out.println("Введите наименование задачи:");
+        String name = scanner.nextLine();
+        System.out.println("Введите содержание задачи:");
+
+        String description = scanner.nextLine();
+        System.out.println("Введите дедлайн задачи:");
+
+        System.out.println("год YYYY:");
+        int year = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("месяц mm:");
+        int month = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("день месяца dd:");
+        int day = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("час hh:");
+        int hour = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("минут mm:");
+        int minute = Integer.parseInt(scanner.nextLine());
+
+        LocalDateTime deadline = LocalDateTime.of(year, month, day, hour, minute);
+
+        ToDo toDo = new ToDo.Builder()
+                .name(name)
+                .description(description)
+                .createdOn(LocalDateTime.now())
+                .isDone(false)
+                .deadline(deadline)
+                .build();
+        toDoesRepository.save(toDo);
+        System.out.println("Задача успешно сохранена!");
     }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
