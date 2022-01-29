@@ -18,27 +18,18 @@ import java.util.Scanner;
 
 @Component
 public class Application {
-    ToDoesRepositoryImpl toDoesRepository;
-
-    // Таблицы
     UserTable userTable;
     ToDoTable toDoTable;
-    //ToDoesRepositoryImpl toDoesRepository;
-    public Application() throws SQLException {
-        userTable = new UserTable();
-        toDoTable = new ToDoTable();
-    }
-
-
-    public Application(ToDoesRepositoryImpl toDoesRepository) {
-        this.toDoesRepository = toDoesRepository;
-    }
-
-    // соединение с БД
-
+    ToDoesRepositoryImpl toDoesRepository = new ToDoesRepositoryImpl();
 
     // Создание всех таблиц
     public void createTablesAndForeignKeys() throws SQLException {
+        try {
+            userTable = new UserTable();
+            toDoTable = new ToDoTable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         userTable.createTable();
         toDoTable.createTable();
     }

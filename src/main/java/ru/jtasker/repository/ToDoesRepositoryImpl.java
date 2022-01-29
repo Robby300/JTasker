@@ -27,7 +27,7 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
                     "VALUES (" + toDo.getName() + "," + toDo.getDescription()
                     + "," + toDo.getCreatedOn() + "," + toDo.getDeadline() +")");
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
         return toDo;
     }

@@ -21,7 +21,7 @@ public class ToDoTable extends BaseTable implements TableOperations {
                 "deadline TIMESTAMP NOT NULL," +
                 "is_done BOOLEAN NOT NULL," +
                 "parent_todo BIGINT," +
-                "FOREIGN KEY (user_id) REFERENCES users(id))", "Создана таблица " + tableName);
+                "FOREIGN KEY (user_id) REFERENCES users(id))", "Создана таблица todo");
     }
 
     @Override
