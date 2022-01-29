@@ -1,10 +1,8 @@
 package ru.jtasker.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.jtasker.domain.ToDo;
 import ru.jtasker.mapper.ToDoMapper;
-import ru.jtasker.repository.db.ToDoTable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
