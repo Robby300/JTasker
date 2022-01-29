@@ -3,7 +3,9 @@ package ru.jtasker.repository.db;
 import ru.jtasker.Application;
 
 import java.io.Closeable;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 // Сервисный родительский класс, куда вынесена реализация общих действий для всех таблиц
 public class BaseTable implements Closeable {
@@ -33,11 +35,15 @@ public class BaseTable implements Closeable {
         statement.close();      // Закрываем statement для фиксации изменений в СУБД
         if (description != null)
             System.out.println(description);
-    };
+    }
+
+    ;
 
     void executeSqlStatement(String sql) throws SQLException {
         executeSqlStatement(sql, null);
-    };
+    }
+
+    ;
 
 
     // Активизация соединения с СУБД, если оно не активно.

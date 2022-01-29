@@ -2,7 +2,7 @@ package ru.jtasker.repository.db;
 
 import java.sql.SQLException;
 
-public class ToDoTable extends BaseTable implements TableOperations{
+public class ToDoTable extends BaseTable implements TableOperations {
 
     public ToDoTable() throws SQLException {
         super("todo");
@@ -23,7 +23,6 @@ public class ToDoTable extends BaseTable implements TableOperations{
     }
 
     @Override
-    public void createForeignKeys() throws SQLException {
-        //super.executeSqlStatement("ALTER TABLE todo ADD FOREIGN KEY (user_id) REFERENCES user (id)", "Внедрён внешний ключ");
+    public void insert(String sql) throws SQLException {
     }
 }
