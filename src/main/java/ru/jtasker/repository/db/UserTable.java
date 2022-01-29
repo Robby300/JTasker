@@ -10,11 +10,9 @@ public class UserTable extends BaseTable implements TableOperations {
 
     @Override
     public void createTable() throws SQLException {
-        super.executeSqlStatement("CREATE TABLE user(" +
-                "id BIGINT AUTO_INCREMENT PRIMARY KEY," +
-                "username VARCHAR(255) NOT NULL," +
-                "pass VARCHAR(255) NOT NULL," +
-                "email VARCHAR(255) NOT NULL)", "Создана таблица " + tableName);
+        super.executeSqlStatement("CREATE TABLE IF NOT EXISTS users " +
+                "(id BIGSERIAL PRIMARY KEY, name VARCHAR(255), lastname VARCHAR(255)," +
+                " email VARCHAR(255))", "Создана таблица " + tableName);
     }
 
     @Override
