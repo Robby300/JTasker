@@ -1,6 +1,6 @@
 CREATE TABLE "user"
 (
-    "id"       BIGSERIAL PRIMARY KEY,
+    "id"      INTEGER PRIMARY KEY,
     "username" VARCHAR(255),
     "pass"     VARCHAR(255),
     "email"    VARCHAR(100)

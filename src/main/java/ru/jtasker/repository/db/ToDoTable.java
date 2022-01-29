@@ -1,0 +1,29 @@
+package ru.jtasker.repository.db;
+
+import java.sql.SQLException;
+
+public class ToDoTable extends BaseTable implements TableOperations{
+
+    public ToDoTable() throws SQLException {
+        super("todo");
+    }
+
+    @Override
+    public void createTable() throws SQLException {
+        super.executeSqlStatement("CREATE TABLE todo(" +
+                "id BIGINT AUTO_INCREMENT PRIMARY KEY," +
+                "user_id BIGINT" +
+                "name VARCHAR(255) NOT NULL," +
+                "description VARCHAR(255) NOT NULL," +
+                "created_on TIMESTAMP NOT NULL," +
+                "deadline TIMESTAMP NOT NULL," +
+                "is_done BOOLEAN NOT NULL," +
+                "parent_todo BIGINT)", "Создана таблица " + tableName);
+    }
+
+    @Override
+    public void createForeignKeys() throws SQLException {
+        super.executeSqlStatement("ALTER TABLE todo(" +
+                "ADD FOREIGN KEY (user_id) REFERENCES user (id)", "Внедрён внешний ключ");
+    }
+}
