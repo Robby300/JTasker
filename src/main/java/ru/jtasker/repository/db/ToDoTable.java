@@ -27,4 +27,9 @@ public class ToDoTable extends BaseTable implements TableOperations {
     @Override
     public void insert(String sql) throws SQLException {
     }
+
+    /*@Override
+    public void findAllByUserId(Long userId) throws SQLException {
+        super.executeSqlStatement();
+    }*/
 }

@@ -6,6 +6,7 @@ import ru.jtasker.domain.ToDo;
 import ru.jtasker.repository.db.ToDoTable;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -34,12 +35,15 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
 
     @Override
     public List<ToDo> findAllByUserId(Long userId) {
+        //toDoTable.findAllByUserId(userId);
         return null;
     }
 
     @Override
     public List<ToDo> findAllNotFinishedTasksByUserId(Long userId) {
-        return null;
+        List<ToDo> toDoList = new ArrayList<>();
+
+        return toDoList;
     }
 
     @Override
