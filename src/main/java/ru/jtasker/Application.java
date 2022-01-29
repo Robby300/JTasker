@@ -1,10 +1,6 @@
 package ru.jtasker;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import ru.jtasker.repository.ToDoesRepository;
-import ru.jtasker.repository.ToDoesRepositoryImpl;
 import ru.jtasker.repository.db.ToDoTable;
 import ru.jtasker.repository.db.UserTable;
 
@@ -46,22 +42,23 @@ public class Application {
     }
 
     public void insertCommand(Scanner scanner) {
-        int command = scanner.nextInt();
+        String command = scanner.nextLine();
         switch (command) {
-            case 1:
+            case "1":
                 System.out.println("Вы выбрали создание задачи");
                 break;
-            case 2:
+            case "2":
                 System.out.println("Ваши незавершённые задачи:");
                 break;
-            case 3:
+            case "3":
                 System.out.println("Ваши завершённые задачи:");
                 break;
-            case 4:
+            case "4":
                 System.out.println("GoodBye...");
                 break;
             default:
                 System.out.println("Введите число от 1 до 4х");
+                break;
         }
     }
 
@@ -73,14 +70,7 @@ public class Application {
         System.out.println("Hello Ivan, tell me about your tasks");
         while (true) {
             application.printConsoleInterface();
-            try {
-                application.insertCommand(scanner);
-            } catch (InputMismatchException e) {
-                System.out.println("Вы ввели не число.");
-                application.insertCommand(scanner);
-            }
-
-
+            application.insertCommand(scanner);
         }
     }
 
