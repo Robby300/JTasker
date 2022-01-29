@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 public class Application {
     public static final String DB_URL = "jdbc:h2:mem:/home/robert/IdeaProjects/JTasker/db/database";
-    //public static final String DB_Driver = "org.h2.Driver";
+    public static final String DB_Driver = "org.h2.Driver";
 
     // Таблицы
     UserTable userTable;
@@ -26,6 +26,7 @@ public class Application {
 
     // инициализация
     public Application() throws SQLException, ClassNotFoundException {
+        Class.forName(DB_Driver);
         userTable = new UserTable();
         toDoTable = new ToDoTable();
     }
