@@ -1,6 +1,5 @@
 package ru.jtasker.repository.db;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;

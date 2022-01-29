@@ -17,9 +17,9 @@ public class ToDoTable extends BaseTable implements TableOperations {
                 "user_id BIGINT," +
                 "name VARCHAR(255) NOT NULL," +
                 "description VARCHAR(255) NOT NULL," +
-                "created_on TIMESTAMP NOT NULL," +
-                "deadline TIMESTAMP NOT NULL," +
-                "is_done BOOLEAN NOT NULL," +
+                "created_on TIMESTAMP," +
+                "deadline TIMESTAMP," +
+                "is_done BOOLEAN," +
                 "parent_todo BIGINT," +
                 "FOREIGN KEY (user_id) REFERENCES users(id))", "Создана таблица todo");
     }

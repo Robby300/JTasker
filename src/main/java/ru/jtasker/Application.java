@@ -1,6 +1,7 @@
 package ru.jtasker;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
@@ -10,28 +11,27 @@ import ru.jtasker.repository.ToDoesRepositoryImpl;
 import ru.jtasker.repository.db.ToDoTable;
 import ru.jtasker.repository.db.UserTable;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
 @Component
 public class Application {
+    @Autowired
     UserTable userTable;
+    @Autowired
     ToDoTable toDoTable;
+    @Autowired
     ToDoesRepositoryImpl toDoesRepository = new ToDoesRepositoryImpl();
 
     // Создание всех таблиц
-    public void createTablesAndForeignKeys() throws SQLException {
+    public void createTablesAndForeignKeys() {
         try {
-            userTable = new UserTable();
-            toDoTable = new ToDoTable();
+            userTable.createTable();
+            toDoTable.createTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        userTable.createTable();
-        toDoTable.createTable();
     }
 
     public void printConsoleInterface() {
@@ -42,7 +42,7 @@ public class Application {
         userTable.insert("INSERT INTO Users(id, username, password, email) VALUES (1, 'Ivan', '123', 'Ivan@mail.ru')");
     }
 
-    public void insertCommandForRegisteredUser(Scanner scanner) {
+    public void insertCommandForRegisteredUser(Scanner scanner) throws SQLException {
         String command = scanner.nextLine();
         switch (command) {
             case "1":
@@ -65,7 +65,7 @@ public class Application {
         }
     }
 
-    private void createAndSaveToDo(Scanner scanner) {
+    private void createAndSaveToDo(Scanner scanner) throws SQLException {
         System.out.println("Вы выбрали создание задачи:");
         System.out.println("Введите наименование задачи:");
         String name = scanner.nextLine();

@@ -1,8 +1,5 @@
 package ru.jtasker.repository.db;
 
-import org.springframework.stereotype.Component;
-
-import java.io.Closeable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
