@@ -1,67 +1,37 @@
-package ru.jtasker;
+package ru.jtasker.ui;
 
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.jtasker.config.AppConfig;
-import ru.jtasker.ui.UserInterface;
+import org.springframework.stereotype.Component;
+import ru.jtasker.domain.ToDo;
+import ru.jtasker.repository.ToDoesRepository;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
-//@Component
-public class Application {
+@Component
+public class UserInterface {
 
-    public static void main(String[] args) throws SQLException {
-        Scanner scanner = new Scanner(System.in);
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        UserInterface ui = context.getBean(UserInterface.class);
+    ToDoesRepository toDoesRepository;
 
-        System.out.println("Hello Ivan, tell me about your tasks");
-
-        while (true) {
-            ui.printConsoleInterface();
-            ui.insertCommandForRegisteredUser(scanner);
-        }
-    }
-}
-
-
-
-    /*@Autowired
-    UserTable userTable;
-    @Autowired
-    ToDoTable toDoTable;
-    @Autowired
-    ToDoesRepositoryImpl toDoesRepository = new ToDoesRepositoryImpl();
-
-    // Создание всех таблиц
-    public void createTablesAndForeignKeys() {
-        try {
-            userTable.createTable();
-            toDoTable.createTable();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public UserInterface(ToDoesRepository toDoesRepository) {
+        this.toDoesRepository = toDoesRepository;
     }
 
     public void printConsoleInterface() {
         System.out.println("1. Создать таску\n2. Посмотреть незавершённые таски\n3. Посмотреть завершённые таски\n4. Выход");
     }
 
-    public void insertDefaultUser() throws SQLException {
-        userTable.insert("INSERT INTO Users(id, username, password, email) VALUES (1, 'Ivan', '123', 'Ivan@mail.ru')");
-    }
-
     public void insertCommandForRegisteredUser(Scanner scanner) throws SQLException {
         String command = scanner.nextLine();
+
         switch (command) {
             case "1":
                 createAndSaveToDo(scanner);
                 break;
             case "2":
                 System.out.println("Ваши незавершённые задачи:");
-                toDoesRepository.findAllNotFinishedTasksByUserId(1L);
+                System.out.println(toDoesRepository.findAllNotFinishedTasksByUserId(1L));
                 break;
             case "3":
                 System.out.println("Ваши завершённые задачи:");
@@ -69,6 +39,7 @@ public class Application {
                 break;
             case "4":
                 System.out.println("GoodBye...");
+                System.exit(0);
                 break;
             default:
                 System.out.println("Введите число от 1 до 4х");
@@ -105,27 +76,12 @@ public class Application {
         ToDo toDo = new ToDo.Builder()
                 .name(name)
                 .description(description)
-                .createdOn(LocalDateTime.now())
+                .createdOn(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
                 .isDone(false)
                 .deadline(deadline)
                 .build();
+
         toDoesRepository.save(toDo);
         System.out.println("Задача успешно сохранена!");
     }
-
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        Scanner scanner = new Scanner(System.in);
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        Application application = context.getBean(Application.class);
-        application.createTablesAndForeignKeys();
-        application.insertDefaultUser();
-        System.out.println("Hello Ivan, tell me about your tasks");
-        while (true) {
-            application.printConsoleInterface();
-            application.insertCommandForRegisteredUser(scanner);
-        }
-    }*/
-
-
-
-
+}
