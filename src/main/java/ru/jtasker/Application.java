@@ -1,29 +1,34 @@
 package ru.jtasker;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import ru.jtasker.repository.ToDoesRepository;
+import ru.jtasker.repository.ToDoesRepositoryImpl;
 import ru.jtasker.repository.db.ToDoTable;
 import ru.jtasker.repository.db.UserTable;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Application {
-    public static final String DB_URL = "jdbc:h2:mem:/home/robert/IdeaProjects/JTasker/db/database";
-
+    public static final String DB_URL = "jdbc:h2:mem:/";
     // Таблицы
     UserTable userTable;
     ToDoTable toDoTable;
+    //ToDoesRepositoryImpl toDoesRepository;
+
+    public Application() throws SQLException {
+        userTable = new UserTable();
+        toDoTable = new ToDoTable();
+    }
 
     // соединение с БД
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL);
-    }
-
-    // инициализация
-    public Application() throws SQLException, ClassNotFoundException {
-        userTable = new UserTable();
-        toDoTable = new ToDoTable();
     }
 
     // Создание всех таблиц
@@ -32,24 +37,53 @@ public class Application {
         toDoTable.createTable();
     }
 
+    public void printConsoleInterface() {
+        System.out.println("1. Создать таску\n2. Посмотреть незавершённые таски\n3. Посмотреть завершённые таски\n4. Выход");
+    }
+
     public void insertDefaultUser() throws SQLException {
         userTable.insert("INSERT INTO Users(id, username, password, email) VALUES (1, 'Ivan', '123', 'Ivan@mail.ru')");
     }
 
-    public static void main(String[] args) {
-        try {
-            Application application = new Application();
-            application.createTablesAndForeignKeys();
-            application.insertDefaultUser();
-            int i = 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Ошибка SQL !");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+    public void insertCommand(Scanner scanner) {
+        int command = scanner.nextInt();
+        switch (command) {
+            case 1:
+                System.out.println("Вы выбрали создание задачи");
+                break;
+            case 2:
+                System.out.println("Ваши незавершённые задачи:");
+                break;
+            case 3:
+                System.out.println("Ваши завершённые задачи:");
+                break;
+            case 4:
+                System.out.println("GoodBye...");
+                break;
+            default:
+                System.out.println("Введите число от 1 до 4х");
         }
-
     }
+
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        Scanner scanner = new Scanner(System.in);
+        Application application = new Application();
+        application.createTablesAndForeignKeys();
+        application.insertDefaultUser();
+        System.out.println("Hello Ivan, tell me about your tasks");
+        while (true) {
+            application.printConsoleInterface();
+            try {
+                application.insertCommand(scanner);
+            } catch (InputMismatchException e) {
+                System.out.println("Вы ввели не число.");
+                application.insertCommand(scanner);
+            }
+
+
+        }
+    }
+
 }
+
 

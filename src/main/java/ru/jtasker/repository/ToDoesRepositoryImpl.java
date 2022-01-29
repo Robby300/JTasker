@@ -1,9 +1,11 @@
 package ru.jtasker.repository;
 
+import org.springframework.stereotype.Repository;
 import ru.jtasker.domain.ToDo;
 
 import java.util.List;
 
+@Repository
 public class ToDoesRepositoryImpl implements ToDoesRepository {
     @Override
     public ToDo save(ToDo toDo) {
