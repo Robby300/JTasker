@@ -161,14 +161,16 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
 
     @Override
     public void deleteToDo(long id) {
-        try (
-                PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)
-        ) {
-            preparedStatement.setLong(1, id);
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Ошибка удаления");
-        }
+        if (showInnersToDo(id).size() == 0) {
+            try (
+                    PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)
+            ) {
+                preparedStatement.setLong(1, id);
+                preparedStatement.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Ошибка удаления");
+            }
+        } else System.err.println("В данной задаче имеются вложенные задачи.");
     }
 }
