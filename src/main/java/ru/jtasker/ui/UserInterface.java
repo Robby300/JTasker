@@ -30,10 +30,10 @@ public class UserInterface {
 
         switch (command) {
             case "1":
-                createAndSaveUser(scanner);
+                loginUser(scanner);
                 break;
             case "2":
-                loginUser(scanner);
+                createAndSaveUser(scanner);
                 break;
             case "3":
                 findAllUsers().forEach(System.out::println);
@@ -75,8 +75,8 @@ public class UserInterface {
         System.out.println("Введите пароль");
         String password = scanner.nextLine();
 
-        currentUser = usersRepository.findUserbyUserNameAndPassword(userName, password);
-        if (currentUser == null) {
+        currentUser = usersRepository.findCurrentUserByUserNameAndPassword(userName, password);
+        if (!currentUserIsLogin()) {
             System.out.println("Неверное имя пользователя или пароль.");
         } else System.out.println("Здравствуйте " + currentUser.getUserName());
     }
