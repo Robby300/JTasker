@@ -24,6 +24,7 @@ public class ToDoMapper {
             todo.setParentToDoId(resultSet.getLong("parent_todo"));
         } catch (SQLException e) {
             e.printStackTrace();
+            System.err.println("Ошибка маппера задачи");
         }
 
         return todo;

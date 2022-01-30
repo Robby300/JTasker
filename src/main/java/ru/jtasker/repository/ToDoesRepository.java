@@ -22,5 +22,4 @@ public interface ToDoesRepository {
     ToDo editToDo(ToDo toDo);
 
     List<ToDo> showInnersToDo(long id);
-
 }

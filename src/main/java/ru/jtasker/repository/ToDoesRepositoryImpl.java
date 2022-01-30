@@ -13,15 +13,9 @@ import java.util.List;
 
 @Repository
 public class ToDoesRepositoryImpl implements ToDoesRepository {
-
-    private final Connection connection;
-    private final ToDoMapper toDoMapper;
-    private final UsersRepository usersRepository;
-
+    // SQL
     private static final String INSERT_TODO = "INSERT INTO todos(" +
             "user_id, name, description, created_on, deadline, parent_todo, is_done) VALUES (?, ?, ?, ?, ?, ?, false)";
-    private static final String INSERT_TODO_BY_ID = "INSERT INTO todos(" +
-            "id, user_id, name, description, created_on, deadline, is_done) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_ALL_BY_PARENT_TODO_ID = "SELECT * FROM todos " +
             "WHERE parent_todo = ?";
     private static final String FIND_ALL_NOT_FINISHED_BY_USER_ID = "SELECT * FROM todos " +
@@ -36,6 +30,10 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
     private static final String UPDATE_TODO = "UPDATE todos SET " +
             "name = ?, description = ?, deadline = ? WHERE id = ?";
 
+    private final Connection connection;
+    private final ToDoMapper toDoMapper;
+    private final UsersRepository usersRepository;
+    
     public ToDoesRepositoryImpl(Connection connection, ToDoMapper toDoMapper, UsersRepository usersRepository) {
         this.connection = connection;
         this.toDoMapper = toDoMapper;
@@ -54,6 +52,7 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            System.err.println("Ошибка сохранения задачи.");
         }
         return toDo;
     }
@@ -65,77 +64,52 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
             preparedStatement.setString(2, toDo.getDescription());
             preparedStatement.setString(3, toDo.getDeadline().toString());
             preparedStatement.setLong(4, toDo.getId());
-
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Ошибка изменения задачи.");
+            System.err.println("Ошибка изменения задачи.");
         }
         return toDo;
     }
 
-    @Override
-    public List<ToDo> showInnersToDo(long id) {
+    private List<ToDo> getToDos(long id, String sql) {
         List<ToDo> todos = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_PARENT_TODO_ID)) {
-            preparedStatement.setString(1, String.valueOf(id));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 todos.add(toDoMapper.toModel(resultSet));
             }
+            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            System.err.println("Ошибка запроса списка задач");
         }
         if (todos.size() == 0) {
             System.out.println("Список задач пуст");
         }
         return todos;
+    }
+
+    @Override
+    public List<ToDo> showInnersToDo(long parenId) {
+        return getToDos(parenId, FIND_ALL_BY_PARENT_TODO_ID);
     }
 
     @Override
     public List<ToDo> findAllNotFinishedTasksByUserId(Long userId) {
-        List<ToDo> todos = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_NOT_FINISHED_BY_USER_ID)) {
-            preparedStatement.setString(1, String.valueOf(userId));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                todos.add(toDoMapper.toModel(resultSet));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (todos.size() == 0) {
-            System.out.println("Список задач пуст");
-        }
-        return todos;
+        return getToDos(userId, FIND_ALL_NOT_FINISHED_BY_USER_ID);
     }
 
     @Override
     public List<ToDo> findAllFinishedTasksByUserId(Long userId) {
-        List<ToDo> todos = new ArrayList<>();
-        try (
-                PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_FINISHED_BY_USER_ID)
-        ) {
-            preparedStatement.setString(1, String.valueOf(userId));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                todos.add(toDoMapper.toModel(resultSet));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (todos.size() == 0) {
-            System.out.println("Список задач пуст");
-        }
-        return todos;
+        return getToDos(userId, FIND_ALL_FINISHED_BY_USER_ID);
     }
 
     @Override
     public ToDo findByIdAndUserId(Long id, Long userId) {
         ToDo todo = new ToDo();
-        try (
-                PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_AND_USER_ID)
-        ) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_AND_USER_ID)) {
             preparedStatement.setString(1, String.valueOf(id));
             preparedStatement.setString(2, String.valueOf(userId));
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -149,28 +123,23 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
 
     @Override
     public void toDoDone(long id) {
-        try (
-                PreparedStatement preparedStatement = connection.prepareStatement(SET_TODO_DONE)
-        ) {
+        queryById(id, SET_TODO_DONE);
+    }
+
+    private void queryById(long id, String sql) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            System.err.println("Ошибка запроса");
         }
     }
 
     @Override
     public void deleteToDo(long id) {
         if (showInnersToDo(id).size() == 0) {
-            try (
-                    PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)
-            ) {
-                preparedStatement.setLong(1, id);
-                preparedStatement.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("Ошибка удаления");
-            }
+            queryById(id, DELETE_BY_ID);
         } else System.err.println("В данной задаче имеются вложенные задачи.");
     }
 }

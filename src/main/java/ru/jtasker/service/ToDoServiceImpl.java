@@ -50,7 +50,7 @@ public class ToDoServiceImpl implements ToDoService {
         toDo.setName((String) toDoParts[0]);
         toDo.setDescription((String) toDoParts[1]);
         toDo.setDeadline((LocalDateTime) toDoParts[2]);
-        toDoesRepository.editToDo(toDo);
+        System.out.println(toDoesRepository.editToDo(toDo));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ToDoServiceImpl implements ToDoService {
                 .deadline((LocalDateTime) toDoParts[2])
                 .build();
         try {
-            toDoesRepository.save(toDo);
+            System.out.println(toDoesRepository.save(toDo));
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Ошибка сохранения пользователя.");

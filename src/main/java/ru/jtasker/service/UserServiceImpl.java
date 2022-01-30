@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
                 .password(password)
                 .email(email)
                 .build();
-        usersRepository.save(user);
+        System.out.println(usersRepository.save(user));
         System.out.println("Регистрация успешно завершена.");
     }
 

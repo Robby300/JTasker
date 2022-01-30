@@ -61,7 +61,7 @@ public class UsersRepositoryImpl implements UsersRepository {
     public User findCurrentUserByUserNameAndPassword(String userName, String password) {
         User user = new User();
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_NAME_AND_PASSWORD);
+                PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_NAME_AND_PASSWORD)
         ) {
             preparedStatement.setString(1, userName);
             preparedStatement.setString(2, password);
