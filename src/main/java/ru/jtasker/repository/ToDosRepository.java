@@ -5,7 +5,7 @@ import ru.jtasker.domain.ToDo;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface ToDoesRepository {
+public interface ToDosRepository {
 
     ToDo save(ToDo toDo) throws SQLException;
 

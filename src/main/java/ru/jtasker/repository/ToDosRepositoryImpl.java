@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ToDoesRepositoryImpl implements ToDoesRepository {
+public class ToDosRepositoryImpl implements ToDosRepository {
     // SQL
     private static final String INSERT_TODO = "INSERT INTO todos(" +
             "user_id, name, description, created_on, deadline, parent_todo, is_done) VALUES (?, ?, ?, ?, ?, ?, false)";
@@ -34,7 +34,7 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
     private final ToDoMapper toDoMapper;
     private final UsersRepository usersRepository;
     
-    public ToDoesRepositoryImpl(Connection connection, ToDoMapper toDoMapper, UsersRepository usersRepository) {
+    public ToDosRepositoryImpl(Connection connection, ToDoMapper toDoMapper, UsersRepository usersRepository) {
         this.connection = connection;
         this.toDoMapper = toDoMapper;
         this.usersRepository = usersRepository;

@@ -2,7 +2,7 @@ package ru.jtasker.service;
 
 import org.springframework.stereotype.Component;
 import ru.jtasker.domain.ToDo;
-import ru.jtasker.repository.ToDoesRepository;
+import ru.jtasker.repository.ToDosRepository;
 import ru.jtasker.repository.UsersRepository;
 
 import java.sql.SQLException;
@@ -14,32 +14,32 @@ import java.util.Scanner;
 @Component
 public class ToDoServiceImpl implements ToDoService {
 
-    private final ToDoesRepository toDoesRepository;
+    private final ToDosRepository toDosRepository;
     private final UsersRepository usersRepository;
 
-    public ToDoServiceImpl(ToDoesRepository toDoesRepository, UsersRepository usersRepository) {
-        this.toDoesRepository = toDoesRepository;
+    public ToDoServiceImpl(ToDosRepository toDosRepository, UsersRepository usersRepository) {
+        this.toDosRepository = toDosRepository;
         this.usersRepository = usersRepository;
     }
 
     @Override
     public List<ToDo> showInnersToDo(long id) {
-        return toDoesRepository.showInnersToDo(id);
+        return toDosRepository.showInnersToDo(id);
     }
 
     @Override
     public ToDo findByIdAndUserId(long todoId, long userId) {
-        return toDoesRepository.findByIdAndUserId(todoId, userId);
+        return toDosRepository.findByIdAndUserId(todoId, userId);
     }
 
     @Override
     public void deleteToDo(long id) {
-        toDoesRepository.deleteToDo(id);
+        toDosRepository.deleteToDo(id);
     }
 
     @Override
     public void toDoDone(long id) {
-        toDoesRepository.toDoDone(id);
+        toDosRepository.toDoDone(id);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ToDoServiceImpl implements ToDoService {
         toDo.setName((String) toDoParts[0]);
         toDo.setDescription((String) toDoParts[1]);
         toDo.setDeadline((LocalDateTime) toDoParts[2]);
-        System.out.println(toDoesRepository.editToDo(toDo));
+        System.out.println(toDosRepository.editToDo(toDo));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ToDoServiceImpl implements ToDoService {
                 .deadline((LocalDateTime) toDoParts[2])
                 .build();
         try {
-            System.out.println(toDoesRepository.save(toDo));
+            System.out.println(toDosRepository.save(toDo));
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Ошибка сохранения пользователя.");
@@ -78,12 +78,12 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public List<ToDo> findAllNotFinishedTasksByUserId(long userId) {
-        return toDoesRepository.findAllNotFinishedTasksByUserId(userId);
+        return toDosRepository.findAllNotFinishedTasksByUserId(userId);
     }
 
     @Override
     public List<ToDo> findAllFinishedTasksByUserId(long userId) {
-        return toDoesRepository.findAllFinishedTasksByUserId(userId);
+        return toDosRepository.findAllFinishedTasksByUserId(userId);
     }
 
     public Object[] getToDoParts(Scanner scanner) {
