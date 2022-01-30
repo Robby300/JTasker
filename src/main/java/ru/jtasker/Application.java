@@ -4,6 +4,7 @@ package ru.jtasker;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.jtasker.config.AppConfig;
+import ru.jtasker.notifier.Notifier;
 import ru.jtasker.ui.ToDoInterface;
 import ru.jtasker.ui.UserInterface;
 
@@ -18,13 +19,15 @@ public class Application {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         UserInterface ui = context.getBean(UserInterface.class);
         ToDoInterface ti = context.getBean(ToDoInterface.class);
+        Notifier notifier = context.getBean(Notifier.class);
 
         System.out.println("JTasker app has started.");
-
+        notifier.start();
         while (true) {
             if (ui.currentUserIsLogin()) {
                 ti.printToDoListInterface();
                 ti.insertCommandForRegisteredUser(scanner);
+                Thread.yield();
             } else {
                 ui.printUserInterface();
                 ui.insertCommand(scanner);

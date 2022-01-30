@@ -2,6 +2,7 @@ package ru.jtasker.ui;
 
 import org.springframework.stereotype.Component;
 import ru.jtasker.domain.ToDo;
+import ru.jtasker.domain.User;
 import ru.jtasker.repository.ToDoesRepository;
 import ru.jtasker.repository.UsersRepository;
 
@@ -158,6 +159,18 @@ public class ToDoInterface {
         LocalDateTime deadline = LocalDateTime.of(year, month, day, hour, minute);
         toDoParts[2] = deadline;
         return toDoParts;
+    }
+
+    public void notifier() {
+        long userId = usersRepository.getCurrentUser().getId();
+        while (true) {
+            for(ToDo todo : toDoesRepository.findAllNotFinishedTasksByUserId(userId)) {
+                if (todo.getDeadline().minusHours(1).equals(LocalDateTime.now())) {
+                    System.err.println("Дедлайн вашей задачи через час!");
+                    System.out.println(todo);
+                } else continue;
+            }
+        }
     }
 }
 
