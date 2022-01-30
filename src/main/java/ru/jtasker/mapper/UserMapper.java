@@ -1,12 +1,10 @@
 package ru.jtasker.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.jtasker.domain.ToDo;
 import ru.jtasker.domain.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 @Component
 public class UserMapper {

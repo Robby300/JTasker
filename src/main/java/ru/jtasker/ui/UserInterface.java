@@ -1,8 +1,10 @@
 package ru.jtasker.ui;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.jtasker.domain.ToDo;
 import ru.jtasker.repository.ToDoesRepository;
+import ru.jtasker.repository.UsersRepository;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -12,10 +14,12 @@ import java.util.Scanner;
 @Component
 public class UserInterface {
 
-    ToDoesRepository toDoesRepository;
+    private final ToDoesRepository toDoesRepository;
+    private final UsersRepository usersRepository;
 
-    public UserInterface(ToDoesRepository toDoesRepository) {
+    public UserInterface(ToDoesRepository toDoesRepository, UsersRepository usersRepository) {
         this.toDoesRepository = toDoesRepository;
+        this.usersRepository = usersRepository;
     }
 
     public void printConsoleInterface() {
