@@ -20,10 +20,17 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
 
     private static final String INSERT_TODO = "INSERT INTO todos(" +
             "user_id, name, description, created_on, deadline, is_done) VALUES (?, ?, ?, ?, ?, false)";
+    private static final String INSERT_TODO_BY_ID = "INSERT INTO todos(" +
+            "id, user_id, name, description, created_on, deadline, is_done) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_ALL_BY_USER_ID = "SELECT * FROM todos " +
             "WHERE user_id = ?";
     private static final String FIND_ALL_NOT_FINISHED_BY_USER_ID = "SELECT * FROM todos " +
             "WHERE user_id = ? AND is_done = false";
+    private static final String FIND_BY_ID_AND_USER_ID = "SELECT * FROM todos " +
+            "WHERE id = ? AND user_id = ?";
+    private static final String DELETE_BY_ID = "DELETE * FROM todos " +
+            "WHERE id = ?";
+    private static final String setToDoDone = "UPDATE todos SET is_done = true WHERE id = ?";
 
     public ToDoesRepositoryImpl(Connection connection, ToDoMapper toDoMapper, UsersRepository usersRepository) {
         this.connection = connection;
@@ -45,6 +52,22 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
         }
         return toDo;
     }
+
+    /*public ToDo EditToDo(ToDo toDo) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_TODO_BY_ID)) {
+            preparedStatement.setLong(1, toDo.getId());
+            preparedStatement.setLong(2, usersRepository.getCurrentUser().getId());
+            preparedStatement.setString(3, toDo.getName());
+            preparedStatement.setString(4, toDo.getDescription());
+            preparedStatement.setString(5, toDo.getCreatedOn().toString());
+            preparedStatement.setString(6, toDo.getDeadline().toString());
+            preparedStatement.setBoolean(7, toDo.isDone());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toDo;
+    }*/
 
     @Override
     public List<ToDo> findAllByUserId(Long userId) {
@@ -74,12 +97,10 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
     @Override
     public List<ToDo> findAllFinishedTasksByUserId(Long userId) {
         List<ToDo> todos = new ArrayList<>();
-
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_USER_ID)
         ) {
             preparedStatement.setString(1, String.valueOf(userId));
-
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 todos.add(toDoMapper.toModel(resultSet));
@@ -91,5 +112,53 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
             System.out.println("Список задач пуст");
         }
         return todos;
+    }
+
+    @Override
+    public ToDo findByIdAndUserId(Long id, Long userId) {
+        ToDo todo = new ToDo();
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_AND_USER_ID)
+        ) {
+            preparedStatement.setString(1, String.valueOf(id));
+            preparedStatement.setString(2, String.valueOf(userId));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            todo = toDoMapper.toModel(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Такой задачи нет.");
+        }
+        return todo;
+    }
+
+    @Override
+    public void toDoDone(long id) {
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(setToDoDone)
+        ) {
+            preparedStatement.setString(1, String.valueOf(id));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            toDoMapper.toModel(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteToDo(long id) {
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)
+        ) {
+            preparedStatement.setString(1, String.valueOf(id));
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Ошибка удаления");
+        }
+    }
+
+    @Override
+    public void createInnerToDo(long id) {
+
     }
 }

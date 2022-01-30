@@ -14,4 +14,12 @@ public interface ToDoesRepository {
     List<ToDo> findAllNotFinishedTasksByUserId(Long userId);
 
     List<ToDo> findAllFinishedTasksByUserId(Long userId);
+
+    ToDo findByIdAndUserId(Long id, Long userId);
+
+    void toDoDone(long id);
+
+    void deleteToDo(long id);
+
+    void createInnerToDo(long id);
 }
