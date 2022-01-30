@@ -5,6 +5,7 @@ import ru.jtasker.domain.User;
 import ru.jtasker.mapper.UserMapper;
 
 import java.sql.Connection;
+import java.util.List;
 
 @Repository
 public class UsersRepositoryImpl implements UsersRepository {
@@ -23,7 +24,7 @@ public class UsersRepositoryImpl implements UsersRepository {
     }
 
     @Override
-    public Iterable<Object> findAll() {
+    public List<User> findAll() {
         return null;
     }
 

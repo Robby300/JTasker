@@ -1,20 +1,18 @@
 package ru.jtasker.ui;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.jtasker.domain.ToDo;
 import ru.jtasker.domain.User;
 import ru.jtasker.repository.ToDoesRepository;
 import ru.jtasker.repository.UsersRepository;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Scanner;
 
 @Component
 public class UserInterface {
 
+    private User currentUser;
     private final ToDoesRepository toDoesRepository;
     private final UsersRepository usersRepository;
 
@@ -35,11 +33,10 @@ public class UserInterface {
                 createAndSaveUser(scanner);
                 break;
             case "2":
-                enterUser(scanner);
+                loginUser(scanner);
                 break;
             case "3":
-                System.out.println("Список зарегистрированных пользователей:");
-                usersRepository.findAll().forEach(System.out::println);
+                findAllUsers().forEach(System.out::println);
                 break;
             default:
                 System.out.println("Введите число от 1 до 2х");
@@ -69,8 +66,7 @@ public class UserInterface {
         System.out.println("Регистрация успешно завершена.");
     }
 
-    private void enterUser(Scanner scanner){
-        User currentUser;
+    private void loginUser(Scanner scanner){
         System.out.println("Произведите вход:");
 
         System.out.println("Введите имя пользователя");
@@ -83,5 +79,13 @@ public class UserInterface {
         if (currentUser == null) {
             System.out.println("Неверное имя пользователя или пароль.");
         } else System.out.println("Здравствуйте " + currentUser.getUserName());
+    }
+    private List<User> findAllUsers() {
+        System.out.println("Список зарегистрированных пользователей:");
+        return usersRepository.findAll();
+    }
+
+    private boolean currentUserIsLogin() {
+        return currentUser != null;
     }
 }

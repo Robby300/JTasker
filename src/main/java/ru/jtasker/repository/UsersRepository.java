@@ -2,10 +2,12 @@ package ru.jtasker.repository;
 
 import ru.jtasker.domain.User;
 
+import java.util.List;
+
 public interface UsersRepository {
     User save(User user);
 
-    Iterable<Object> findAll();
+    List<User> findAll();
 
     User findUserbyUserNameAndPassword(String userName, String password);
 }
