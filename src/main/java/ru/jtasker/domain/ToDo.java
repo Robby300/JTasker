@@ -150,14 +150,14 @@ public class ToDo {
     @Override
     public String toString() {
         return "ToDo{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", createdOn=" + createdOn +
-                ", deadline=" + deadline +
-                ", isDone=" + isDone +
-                ", parentToDoId=" + parentToDoId +
+                "id= " + id +
+                ", userId= " + userId +
+                ", name= " + name + '\'' +
+                ", description= " + description + '\'' +
+                ", createdOn= " + createdOn +
+                ", deadline= " + deadline +
+                ", isDone= " + isDone +
+                ", parentToDoId= " + parentToDoId +
                 '}';
     }
 }

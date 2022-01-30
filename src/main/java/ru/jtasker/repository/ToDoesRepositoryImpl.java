@@ -14,8 +14,8 @@ import java.util.List;
 @Repository
 public class ToDoesRepositoryImpl implements ToDoesRepository {
 
-    Connection connection;
-    ToDoMapper toDoMapper;
+    private final Connection connection;
+    private final ToDoMapper toDoMapper;
 
     private static final String INSERT_TODO = "INSERT INTO todos(" +
             "user_id, name, description, created_on, deadline, is_done) VALUES (1, ?, ?, ?, ?, false)";

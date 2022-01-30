@@ -31,7 +31,7 @@ public class UserInterface {
                 break;
             case "2":
                 System.out.println("Ваши незавершённые задачи:");
-                System.out.println(toDoesRepository.findAllNotFinishedTasksByUserId(1L));
+                toDoesRepository.findAllNotFinishedTasksByUserId(1L).forEach(System.out::println);
                 break;
             case "3":
                 System.out.println("Ваши завершённые задачи:");
