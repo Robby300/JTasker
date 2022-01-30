@@ -1,82 +1,37 @@
 package ru.jtasker.ui;
 
 import org.springframework.stereotype.Component;
-import ru.jtasker.domain.User;
-import ru.jtasker.repository.UsersRepository;
+import ru.jtasker.service.UserService;
 
-import java.util.List;
 import java.util.Scanner;
 
 @Component
 public class UserInterface {
-    private User currentUser;
+    private final UserService userService;
 
-    private final UsersRepository usersRepository;
-
-    public UserInterface(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
+    public UserInterface(UserService userService) {
+        this.userService = userService;
     }
 
     public void printUserInterface() {
-        System.out.println("1. Войти\n2. Зарегистрироваться\n3. Список пользователей\n4. Завершить приложение");
+        System.out.println("""
+                1. Войти
+                2. Зарегистрироваться
+                3. Список пользователей
+                4. Завершить приложение.""");
     }
 
     public void insertCommand(Scanner scanner) {
         String command = scanner.nextLine();
-
         switch (command) {
-            case "1" -> loginUser(scanner);
-            case "2" -> createAndSaveUser(scanner);
-            case "3" -> findAllUsers().forEach(System.out::println);
+            case "1" -> userService.loginUser(scanner);
+            case "2" -> userService.createAndSaveUser(scanner);
+            case "3" -> userService.findAllUsers().forEach(System.out::println);
             case "4" -> {
                 System.out.println("GoodBye...");
                 System.exit(0);
             }
-            default -> System.out.println("Введите число от 1 до 4х");
+            default -> System.err.println("Введите число от 1 до 4х");
         }
-    }
-
-    private void createAndSaveUser(Scanner scanner) {
-        System.out.println("Вы выбрали регистрацию пользователя:");
-
-        System.out.println("Введите имя пользователя");
-        String userName = scanner.nextLine();
-
-        System.out.println("Введите пароль");
-        String password = scanner.nextLine();
-
-        System.out.println("Введите почту");
-        String email = scanner.nextLine();
-
-        User user = new User.Builder()
-                .userName(userName)
-                .password(password)
-                .email(email)
-                .build();
-
-        usersRepository.save(user);
-        System.out.println("Регистрация успешно завершена.");
-    }
-
-    private void loginUser(Scanner scanner) {
-        System.out.println("Произведите вход:");
-
-        System.out.println("Введите имя пользователя");
-        String userName = scanner.nextLine();
-
-        System.out.println("Введите пароль");
-        String password = scanner.nextLine();
-
-        currentUser = usersRepository.findCurrentUserByUserNameAndPassword(userName, password);
-        if (currentUserIsLogin()) System.out.println("Здравствуйте " + currentUser.getUserName());
-    }
-
-    private List<User> findAllUsers() {
-        System.out.println("Список зарегистрированных пользователей:");
-        return usersRepository.findAll();
-    }
-
-    public boolean currentUserIsLogin() {
-        return currentUser != null && currentUser.getUserName() != null;
     }
 }

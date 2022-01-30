@@ -12,5 +12,6 @@ public interface UsersRepository {
     User findCurrentUserByUserNameAndPassword(String userName, String password);
 
     User getCurrentUser();
+
     void setCurrentUserToNull();
 }

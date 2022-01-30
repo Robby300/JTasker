@@ -86,7 +86,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", userName=" + userName +
-                ", password=" + password  +
+                ", password=" + password +
                 ", email=" + email +
                 '}';
     }
