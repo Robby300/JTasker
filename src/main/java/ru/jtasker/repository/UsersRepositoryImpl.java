@@ -70,6 +70,7 @@ public class UsersRepositoryImpl implements UsersRepository {
             setCurrentUser(user);
             resultSet.close();
         } catch (Exception e) {
+            System.err.println(e.getMessage());
             System.out.println("Пользователь не найден.");
         }
         return user;

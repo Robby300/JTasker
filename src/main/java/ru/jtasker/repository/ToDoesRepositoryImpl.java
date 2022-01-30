@@ -22,8 +22,8 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
             "user_id, name, description, created_on, deadline, parent_todo, is_done) VALUES (?, ?, ?, ?, ?, ?, false)";
     private static final String INSERT_TODO_BY_ID = "INSERT INTO todos(" +
             "id, user_id, name, description, created_on, deadline, is_done) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String FIND_ALL_BY_USER_ID = "SELECT * FROM todos " +
-            "WHERE user_id = ?";
+    private static final String FIND_ALL_BY_PARENT_TODO_ID = "SELECT * FROM todos " +
+            "WHERE parent_todo = ?";
     private static final String FIND_ALL_NOT_FINISHED_BY_USER_ID = "SELECT * FROM todos " +
             "WHERE user_id = ? AND is_done = false";
     private static final String FIND_ALL_FINISHED_BY_USER_ID = "SELECT * FROM todos " +
@@ -33,7 +33,6 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
     private static final String DELETE_BY_ID = "DELETE FROM todos " +
             "WHERE id = ?";
     private static final String SET_TODO_DONE = "UPDATE todos SET is_done = true WHERE id = ?";
-
     private static final String UPDATE_TODO = "UPDATE todos SET " +
             "name = ?, description = ?, deadline = ? WHERE id = ?";
 
@@ -76,12 +75,28 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
     }
 
     @Override
+    public List<ToDo> showInnersToDo(long id) {
+        List<ToDo> todos = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_PARENT_TODO_ID)) {
+            preparedStatement.setString(1, String.valueOf(id));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                todos.add(toDoMapper.toModel(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (todos.size() == 0) {
+            System.out.println("Список задач пуст");
+        }
+        return todos;
+    }
+
+    @Override
     public List<ToDo> findAllNotFinishedTasksByUserId(Long userId) {
         List<ToDo> todos = new ArrayList<>();
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_NOT_FINISHED_BY_USER_ID)) {
             preparedStatement.setString(1, String.valueOf(userId));
-
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 todos.add(toDoMapper.toModel(resultSet));

@@ -36,9 +36,10 @@ public class ToDoInterface {
         System.out.println("""
                 1. Изменить задачу
                 2. Добавить вложенную задачу
-                3. Удалить задачу
-                4. Отметить выполнение
-                5. В предыдущее меню.""");
+                3. Показать все вложенные незавершенные задачи
+                4. Удалить задачу
+                5. Отметить выполнение
+                6. В предыдущее меню.""");
     }
 
     public void insertCommandForCurrentToDo(Scanner scanner, ToDo currentToDo) throws SQLException {
@@ -54,20 +55,24 @@ public class ToDoInterface {
                 createAndSaveToDo(scanner, currentToDo.getId());
             }
             case "3" -> {
+                System.out.println("Все вложенные незавершённые задачи:");
+                toDoesRepository.showInnersToDo(currentToDo.getId()).forEach(System.out::println);
+            }
+            case "4" -> {
                 System.out.println("Удалить задачу:");
                 toDoesRepository.deleteToDo(currentToDo.getId());
             }
-            case "4" -> {
+            case "5" -> {
                 System.out.println("Отметка о выполнении");
                 toDoesRepository.toDoDone(currentToDo.getId());
                 System.out.println(currentToDo);
             }
-            case "5" -> {
+            case "6" -> {
                 System.out.println("Возврат в предыдущее меню");
                 printToDoListInterface();
                 insertCommandForRegisteredUser(scanner);
             }
-            default -> System.out.println("Введите число от 1 до 5х");
+            default -> System.out.println("Введите число от 1 до 6");
         }
     }
 

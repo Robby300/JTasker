@@ -20,4 +20,7 @@ public interface ToDoesRepository {
     void deleteToDo(long id);
 
     ToDo editToDo(ToDo toDo);
+
+    List<ToDo> showInnersToDo(long id);
+
 }
