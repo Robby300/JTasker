@@ -152,8 +152,8 @@ public class ToDo {
         return "ToDo{" +
                 "id= " + id +
                 ", userId= " + userId +
-                ", name= " + name + '\'' +
-                ", description= " + description + '\'' +
+                ", name= " + name +
+                ", description= " + description +
                 ", createdOn= " + createdOn +
                 ", deadline= " + deadline +
                 ", isDone= " + isDone +
