@@ -9,8 +9,6 @@ public interface ToDoesRepository {
 
     ToDo save(ToDo toDo) throws SQLException;
 
-    List<ToDo> findAllByUserId(Long userId);
-
     List<ToDo> findAllNotFinishedTasksByUserId(Long userId);
 
     List<ToDo> findAllFinishedTasksByUserId(Long userId);
@@ -20,8 +18,6 @@ public interface ToDoesRepository {
     void toDoDone(long id);
 
     void deleteToDo(long id);
-
-    void createInnerToDo(long id);
 
     ToDo editToDo(ToDo toDo);
 }

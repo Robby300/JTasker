@@ -2,10 +2,8 @@ package ru.jtasker.ui;
 
 import org.springframework.stereotype.Component;
 import ru.jtasker.domain.User;
-import ru.jtasker.repository.ToDoesRepository;
 import ru.jtasker.repository.UsersRepository;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,11 +11,9 @@ import java.util.Scanner;
 public class UserInterface {
     private User currentUser;
 
-    private final ToDoesRepository toDoesRepository;
     private final UsersRepository usersRepository;
 
-    public UserInterface(ToDoesRepository toDoesRepository, UsersRepository usersRepository) {
-        this.toDoesRepository = toDoesRepository;
+    public UserInterface(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
@@ -25,30 +21,22 @@ public class UserInterface {
         System.out.println("1. Войти\n2. Зарегистрироваться\n3. Список пользователей\n4. Завершить приложение");
     }
 
-    public void insertCommand(Scanner scanner) throws SQLException {
+    public void insertCommand(Scanner scanner) {
         String command = scanner.nextLine();
 
         switch (command) {
-            case "1":
-                loginUser(scanner);
-                break;
-            case "2":
-                createAndSaveUser(scanner);
-                break;
-            case "3":
-                findAllUsers().forEach(System.out::println);
-                break;
-            case "4":
+            case "1" -> loginUser(scanner);
+            case "2" -> createAndSaveUser(scanner);
+            case "3" -> findAllUsers().forEach(System.out::println);
+            case "4" -> {
                 System.out.println("GoodBye...");
                 System.exit(0);
-                break;
-            default:
-                System.out.println("Введите число от 1 до 4х");
-                break;
+            }
+            default -> System.out.println("Введите число от 1 до 4х");
         }
     }
 
-    private void createAndSaveUser(Scanner scanner) throws SQLException {
+    private void createAndSaveUser(Scanner scanner) {
         System.out.println("Вы выбрали регистрацию пользователя:");
 
         System.out.println("Введите имя пользователя");

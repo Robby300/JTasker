@@ -29,7 +29,6 @@ public class Application {
                 ui.printUserInterface();
                 ui.insertCommand(scanner);
             }
-
         }
     }
 }

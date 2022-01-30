@@ -76,11 +76,6 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
     }
 
     @Override
-    public List<ToDo> findAllByUserId(Long userId) {
-        return null;
-    }
-
-    @Override
     public List<ToDo> findAllNotFinishedTasksByUserId(Long userId) {
         List<ToDo> todos = new ArrayList<>();
 
@@ -160,10 +155,5 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
             e.printStackTrace();
             System.out.println("Ошибка удаления");
         }
-    }
-
-    @Override
-    public void createInnerToDo(long id) {
-
     }
 }
