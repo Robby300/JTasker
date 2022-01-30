@@ -19,7 +19,7 @@ public class Application {
         UserInterface ui = context.getBean(UserInterface.class);
         ToDoInterface ti = context.getBean(ToDoInterface.class);
 
-        System.out.println("Hello Ivan, tell me about your tasks");
+        System.out.println("JTasker app has started.");
 
         while (true) {
             if (ui.currentUserIsLogin()) {
