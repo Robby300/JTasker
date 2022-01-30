@@ -43,6 +43,7 @@ public class ToDoInterface {
                 break;
             case "2":
                 System.out.println("Создание вложенной задачи:");
+                System.out.println(currentToDo);
                 createAndSaveToDo(scanner, currentToDo.getId());
                 break;
             case "3":
@@ -53,7 +54,7 @@ public class ToDoInterface {
                 System.out.println("Отметка о выполнении");
                 toDoesRepository.toDoDone(currentToDo.getId());
                 System.out.println(currentToDo);
-                printToDoInterface();
+
                 break;
             case "5":
                 System.out.println("Возврат в предыдущее меню");
@@ -80,12 +81,11 @@ public class ToDoInterface {
                 break;
             case "3":
                 System.out.println("Ваши завершённые задачи:");
-                toDoesRepository.findAllFinishedTasksByUserId(userId);
+                toDoesRepository.findAllFinishedTasksByUserId(userId).forEach(System.out::println);
                 break;
             case "4":
                 System.out.println("Введите ID Задачи");
-                ToDo currentToDo = toDoesRepository.findByIdAndUserId(Long.parseLong(scanner.nextLine()),
-                        usersRepository.getCurrentUser().getId());
+                ToDo currentToDo = toDoesRepository.findByIdAndUserId(Long.parseLong(scanner.nextLine()), userId);
                 System.out.println(currentToDo);
                 printToDoInterface();
                 insertCommandForCurrentToDo(scanner, currentToDo);
@@ -138,51 +138,39 @@ public class ToDoInterface {
                 .isDone(false)
                 .deadline(deadline)
                 .build();
-
         toDoesRepository.save(toDo);
         System.out.println("Задача успешно сохранена!");
     }
 
     private void editToDo(Scanner scanner, ToDo toDo) throws SQLException {
         long userId = usersRepository.getCurrentUser().getId();
-        System.out.println("Вы выбрали создание задачи:");
-        System.out.println("Введите наименование задачи:");
+        System.out.println("Вы выбрали редактирование задачи:");
+        System.out.println("Введите новое наименование задачи:");
         String name = scanner.nextLine();
+
         System.out.println("Введите содержание задачи:");
-
         String description = scanner.nextLine();
-        System.out.println("Введите дедлайн задачи:");
 
+        System.out.println("Введите дедлайн задачи:");
         System.out.println("год YYYY:");
         int year = Integer.parseInt(scanner.nextLine());
-
         System.out.println("месяц mm:");
         int month = Integer.parseInt(scanner.nextLine());
-
         System.out.println("день месяца dd:");
         int day = Integer.parseInt(scanner.nextLine());
-
         System.out.println("час hh:");
         int hour = Integer.parseInt(scanner.nextLine());
-
         System.out.println("минут mm:");
         int minute = Integer.parseInt(scanner.nextLine());
 
         LocalDateTime deadline = LocalDateTime.of(year, month, day, hour, minute);
 
-        ToDo updatedToDo = new ToDo.Builder()
-                .id(toDo.getId())
-                .name(name)
-                .userId(userId)
-                .parentToDoId(toDoesRepository.findByIdAndUserId(toDo.getId(), userId).getParentToDoId())
-                .description(description)
-                .createdOn(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                .isDone(toDo.isDone())
-                .deadline(deadline)
-                .build();
+        toDo.setName(name);
+        toDo.setDescription(description);
+        toDo.setDeadline(deadline);
 
-        toDoesRepository.save(toDo);
-        System.out.println("Задача успешно изменена");
+        toDoesRepository.editToDo(toDo);
+
     }
 }
 

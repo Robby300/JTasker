@@ -22,4 +22,6 @@ public interface ToDoesRepository {
     void deleteToDo(long id);
 
     void createInnerToDo(long id);
+
+    ToDo editToDo(ToDo toDo);
 }

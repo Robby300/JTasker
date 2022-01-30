@@ -19,18 +19,23 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
     private final UsersRepository usersRepository;
 
     private static final String INSERT_TODO = "INSERT INTO todos(" +
-            "user_id, name, description, created_on, deadline, is_done) VALUES (?, ?, ?, ?, ?, false)";
+            "user_id, name, description, created_on, deadline, parent_todo, is_done) VALUES (?, ?, ?, ?, ?, ?, false)";
     private static final String INSERT_TODO_BY_ID = "INSERT INTO todos(" +
             "id, user_id, name, description, created_on, deadline, is_done) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_ALL_BY_USER_ID = "SELECT * FROM todos " +
             "WHERE user_id = ?";
     private static final String FIND_ALL_NOT_FINISHED_BY_USER_ID = "SELECT * FROM todos " +
             "WHERE user_id = ? AND is_done = false";
+    private static final String FIND_ALL_FINISHED_BY_USER_ID = "SELECT * FROM todos " +
+            "WHERE user_id = ? AND is_done = true";
     private static final String FIND_BY_ID_AND_USER_ID = "SELECT * FROM todos " +
             "WHERE id = ? AND user_id = ?";
-    private static final String DELETE_BY_ID = "DELETE * FROM todos " +
+    private static final String DELETE_BY_ID = "DELETE FROM todos " +
             "WHERE id = ?";
-    private static final String setToDoDone = "UPDATE todos SET is_done = true WHERE id = ?";
+    private static final String SET_TODO_DONE = "UPDATE todos SET is_done = true WHERE id = ?";
+
+    private static final String UPDATE_TODO = "UPDATE todos SET " +
+            "name = ?, description = ?, deadline = ? WHERE id = ?";
 
     public ToDoesRepositoryImpl(Connection connection, ToDoMapper toDoMapper, UsersRepository usersRepository) {
         this.connection = connection;
@@ -46,6 +51,7 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
             preparedStatement.setString(3, toDo.getDescription());
             preparedStatement.setString(4, toDo.getCreatedOn().toString());
             preparedStatement.setString(5, toDo.getDeadline().toString());
+            preparedStatement.setLong(6, toDo.getParentToDoId());
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -53,21 +59,21 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
         return toDo;
     }
 
-    /*public ToDo EditToDo(ToDo toDo) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_TODO_BY_ID)) {
-            preparedStatement.setLong(1, toDo.getId());
-            preparedStatement.setLong(2, usersRepository.getCurrentUser().getId());
-            preparedStatement.setString(3, toDo.getName());
-            preparedStatement.setString(4, toDo.getDescription());
-            preparedStatement.setString(5, toDo.getCreatedOn().toString());
-            preparedStatement.setString(6, toDo.getDeadline().toString());
-            preparedStatement.setBoolean(7, toDo.isDone());
+    @Override
+    public ToDo editToDo(ToDo toDo) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TODO)) {
+            preparedStatement.setString(1, toDo.getName());
+            preparedStatement.setString(2, toDo.getDescription());
+            preparedStatement.setString(3, toDo.getDeadline().toString());
+            preparedStatement.setLong(4, toDo.getId());
+
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Ошибка изменения задачи.");
         }
         return toDo;
-    }*/
+    }
 
     @Override
     public List<ToDo> findAllByUserId(Long userId) {
@@ -98,7 +104,7 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
     public List<ToDo> findAllFinishedTasksByUserId(Long userId) {
         List<ToDo> todos = new ArrayList<>();
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_USER_ID)
+                PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_FINISHED_BY_USER_ID)
         ) {
             preparedStatement.setString(1, String.valueOf(userId));
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -134,11 +140,10 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
     @Override
     public void toDoDone(long id) {
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(setToDoDone)
+                PreparedStatement preparedStatement = connection.prepareStatement(SET_TODO_DONE)
         ) {
-            preparedStatement.setString(1, String.valueOf(id));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            toDoMapper.toModel(resultSet);
+            preparedStatement.setLong(1, id);
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -149,7 +154,7 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)
         ) {
-            preparedStatement.setString(1, String.valueOf(id));
+            preparedStatement.setLong(1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
