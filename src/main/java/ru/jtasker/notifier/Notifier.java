@@ -8,7 +8,6 @@ import ru.jtasker.ui.UserInterface;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.SortedMap;
 
 @Component
 public class Notifier extends Thread {
