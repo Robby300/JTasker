@@ -2,23 +2,20 @@ package ru.jtasker.notifier;
 
 import org.springframework.stereotype.Component;
 import ru.jtasker.domain.ToDo;
-import ru.jtasker.repository.ToDoesRepository;
-import ru.jtasker.repository.UsersRepository;
-import ru.jtasker.ui.UserInterface;
+import ru.jtasker.service.ToDoService;
+import ru.jtasker.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
 public class Notifier extends Thread {
-    final private UsersRepository usersRepository;
-    final private ToDoesRepository toDoesRepository;
-    final private UserInterface userInterface;
+    final private UserService userService;
+    final private ToDoService toDoService;
 
-    public Notifier(UsersRepository usersRepository, ToDoesRepository toDoesRepository1, UserInterface userInterface) {
-        this.usersRepository = usersRepository;
-        this.toDoesRepository = toDoesRepository1;
-        this.userInterface = userInterface;
+    public Notifier(UserService userService, ToDoService toDoService) {
+        this.userService = userService;
+        this.toDoService = toDoService;
 
         setDaemon(true);
     }
@@ -28,10 +25,10 @@ public class Notifier extends Thread {
         System.err.println("Нотифайер запущен");
         while (true) {
 
-            if (usersRepository.getCurrentUser() != null) {
+            if (userService.getCurrentUser() != null) {
                 System.err.println("Нотифайер заметил логин");
-                long userId = usersRepository.getCurrentUser().getId();
-                List<ToDo> toDos = toDoesRepository.findAllNotFinishedTasksByUserId(userId);
+                long userId = userService.getCurrentUser().getId();
+                List<ToDo> toDos = toDoService.findAllNotFinishedTasksByUserId(userId);
                 for (ToDo todo : toDos) {
                     LocalDateTime now = LocalDateTime.now();
                     LocalDateTime before = todo.getDeadline().minusHours(1).minusMinutes(1);

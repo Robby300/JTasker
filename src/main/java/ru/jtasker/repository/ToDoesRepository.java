@@ -13,7 +13,7 @@ public interface ToDoesRepository {
 
     List<ToDo> findAllFinishedTasksByUserId(Long userId);
 
-    ToDo findByIdAndUserId(Long id, Long userId);
+    ToDo findByIdAndUserId(Long toDoId, Long userId);
 
     void toDoDone(long id);
 
