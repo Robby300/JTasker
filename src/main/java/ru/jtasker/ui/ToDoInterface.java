@@ -1,6 +1,5 @@
 package ru.jtasker.ui;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.jtasker.domain.ToDo;
 import ru.jtasker.repository.ToDoesRepository;
@@ -16,13 +15,15 @@ public class ToDoInterface {
 
     private final ToDoesRepository toDoesRepository;
     private final UsersRepository usersRepository;
+    private final UserInterface userInterface;
 
-    public ToDoInterface(ToDoesRepository toDoesRepository, UsersRepository usersRepository) {
+    public ToDoInterface(ToDoesRepository toDoesRepository, UsersRepository usersRepository, UserInterface userInterface) {
         this.toDoesRepository = toDoesRepository;
         this.usersRepository = usersRepository;
+        this.userInterface = userInterface;
     }
 
-    public void printToDoInterface() {
+    public void printToDoListInterface() {
         System.out.println("1. Создать таску\n2. Посмотреть незавершённые таски" +
                 "\n3. Посмотреть завершённые таски\n4. Выход из учетной записи.");
     }
@@ -44,7 +45,9 @@ public class ToDoInterface {
                 break;
             case "4":
                 System.out.println("Возврат в основное меню");
-                //usersRepository.setCurrentUserToNull();
+                usersRepository.setCurrentUserToNull();
+                userInterface.printUserInterface();
+                userInterface.insertCommand(scanner);
                 break;
             default:
                 System.out.println("Введите число от 1 до 4х");

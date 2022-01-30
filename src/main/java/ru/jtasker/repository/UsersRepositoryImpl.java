@@ -35,9 +35,7 @@ public class UsersRepositoryImpl implements UsersRepository {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER)) {
             preparedStatement.setString(1, user.getUserName());
             preparedStatement.setString(2, user.getPassword());
-            ;
             preparedStatement.setString(3, user.getEmail());
-
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,14 +60,17 @@ public class UsersRepositoryImpl implements UsersRepository {
     @Override
     public User findCurrentUserByUserNameAndPassword(String userName, String password) {
         User user = new User();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_NAME_AND_PASSWORD)) {
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_NAME_AND_PASSWORD);
+        ) {
             preparedStatement.setString(1, userName);
             preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
             user = userMapper.toModel(resultSet);
             setCurrentUser(user);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            resultSet.close();
+        } catch (Exception e) {
+            System.out.println("Пользователь не найден.");
         }
         return user;
     }

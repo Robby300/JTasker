@@ -43,7 +43,7 @@ public class UserInterface {
                 System.exit(0);
                 break;
             default:
-                System.out.println("Введите число от 1 до 2х");
+                System.out.println("Введите число от 1 до 4х");
                 break;
         }
     }
@@ -70,7 +70,7 @@ public class UserInterface {
         System.out.println("Регистрация успешно завершена.");
     }
 
-    private void loginUser(Scanner scanner){
+    private void loginUser(Scanner scanner) {
         System.out.println("Произведите вход:");
 
         System.out.println("Введите имя пользователя");
@@ -80,16 +80,15 @@ public class UserInterface {
         String password = scanner.nextLine();
 
         currentUser = usersRepository.findCurrentUserByUserNameAndPassword(userName, password);
-        if (!currentUserIsLogin()) {
-            System.out.println("Неверное имя пользователя или пароль.");
-        } else System.out.println("Здравствуйте " + currentUser.getUserName());
+        if (currentUserIsLogin()) System.out.println("Здравствуйте " + currentUser.getUserName());
     }
+
     private List<User> findAllUsers() {
         System.out.println("Список зарегистрированных пользователей:");
         return usersRepository.findAll();
     }
 
     public boolean currentUserIsLogin() {
-        return currentUser != null;
+        return currentUser != null && currentUser.getUserName() != null;
     }
 }

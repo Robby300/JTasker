@@ -65,6 +65,9 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        if (todos.size() == 0) {
+            System.out.println("Список задач пуст");
+        }
         return todos;
     }
 
@@ -72,7 +75,9 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
     public List<ToDo> findAllFinishedTasksByUserId(Long userId) {
         List<ToDo> todos = new ArrayList<>();
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_USER_ID)) {
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_USER_ID)
+        ) {
             preparedStatement.setString(1, String.valueOf(userId));
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -81,6 +86,9 @@ public class ToDoesRepositoryImpl implements ToDoesRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        if (todos.size() == 0) {
+            System.out.println("Список задач пуст");
         }
         return todos;
     }
