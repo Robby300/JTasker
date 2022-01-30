@@ -22,8 +22,14 @@ public class Application {
         System.out.println("Hello Ivan, tell me about your tasks");
 
         while (true) {
-            ti.printToDoInterface();
-            ti.insertCommandForRegisteredUser(scanner);
+            if (ui.currentUserIsLogin()) {
+                ti.printToDoInterface();
+                ti.insertCommandForRegisteredUser(scanner);
+            } else {
+                ui.printUserInterface();
+                ui.insertCommand(scanner);
+            }
+
         }
     }
 }

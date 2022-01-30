@@ -85,7 +85,7 @@ public class UserInterface {
         return usersRepository.findAll();
     }
 
-    private boolean currentUserIsLogin() {
+    public boolean currentUserIsLogin() {
         return currentUser != null;
     }
 }
