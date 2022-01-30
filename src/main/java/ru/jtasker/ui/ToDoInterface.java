@@ -8,8 +8,6 @@ import ru.jtasker.repository.UsersRepository;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 @Component
@@ -102,7 +100,7 @@ public class ToDoInterface {
                 userInterface.printUserInterface();
                 userInterface.insertCommand(scanner);
             }
-            default -> System.out.println("Введите число от 1 до 5х");
+            default -> System.out.println("Введите число от 1 до 5");
         }
     }
 
