@@ -23,27 +23,28 @@ public class ToDoInterface {
     }
 
     public void printToDoInterface() {
-        System.out.println("1. Создать таску\n2. Посмотреть незавершённые таски\n3. Посмотреть завершённые таски\n4. Выход");
+        System.out.println("1. Создать таску\n2. Посмотреть незавершённые таски" +
+                "\n3. Посмотреть завершённые таски\n4. Выход из учетной записи.");
     }
 
     public void insertCommandForRegisteredUser(Scanner scanner) throws SQLException {
         String command = scanner.nextLine();
-
+        long userId = usersRepository.getCurrentUser().getId();
         switch (command) {
             case "1":
                 createAndSaveToDo(scanner);
                 break;
             case "2":
                 System.out.println("Ваши незавершённые задачи:");
-                toDoesRepository.findAllNotFinishedTasksByUserId(1L).forEach(System.out::println);
+                toDoesRepository.findAllNotFinishedTasksByUserId(userId).forEach(System.out::println);
                 break;
             case "3":
                 System.out.println("Ваши завершённые задачи:");
-                toDoesRepository.findAllFinishedTasksByUserId(1L);
+                toDoesRepository.findAllFinishedTasksByUserId(userId);
                 break;
             case "4":
-                System.out.println("GoodBye...");
-                System.exit(0);
+                System.out.println("Возврат в основное меню");
+                //usersRepository.setCurrentUserToNull();
                 break;
             default:
                 System.out.println("Введите число от 1 до 4х");
@@ -52,6 +53,7 @@ public class ToDoInterface {
     }
 
     private void createAndSaveToDo(Scanner scanner) throws SQLException {
+        long userId = usersRepository.getCurrentUser().getId();
         System.out.println("Вы выбрали создание задачи:");
         System.out.println("Введите наименование задачи:");
         String name = scanner.nextLine();
@@ -79,6 +81,7 @@ public class ToDoInterface {
 
         ToDo toDo = new ToDo.Builder()
                 .name(name)
+                .userId(userId)
                 .description(description)
                 .createdOn(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
                 .isDone(false)

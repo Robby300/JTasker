@@ -1,7 +1,6 @@
 package ru.jtasker.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.jtasker.domain.ToDo;
 import ru.jtasker.domain.User;
 import ru.jtasker.mapper.UserMapper;
 
@@ -14,7 +13,7 @@ import java.util.List;
 
 @Repository
 public class UsersRepositoryImpl implements UsersRepository {
-    private static User currentUser = new User();
+    private static User currentUser;
 
     private final Connection connection;
     private final UserMapper userMapper;
@@ -35,7 +34,8 @@ public class UsersRepositoryImpl implements UsersRepository {
     public User save(User user) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER)) {
             preparedStatement.setString(1, user.getUserName());
-            preparedStatement.setString(2, user.getPassword());;
+            preparedStatement.setString(2, user.getPassword());
+            ;
             preparedStatement.setString(3, user.getEmail());
 
             preparedStatement.execute();
@@ -61,22 +61,27 @@ public class UsersRepositoryImpl implements UsersRepository {
 
     @Override
     public User findCurrentUserByUserNameAndPassword(String userName, String password) {
+        User user = new User();
         try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_NAME_AND_PASSWORD)) {
-            preparedStatement.setString(1, currentUser.getUserName());
-            preparedStatement.setString(2, currentUser.getPassword());
+            preparedStatement.setString(1, userName);
+            preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                currentUser = userMapper.toModel(resultSet);
-            }
+            user = userMapper.toModel(resultSet);
+            setCurrentUser(user);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return user;
+    }
+
+    @Override
+    public User getCurrentUser() {
         return currentUser;
     }
 
-
-    public static User getCurrentUser() {
-        return currentUser;
+    @Override
+    public void setCurrentUserToNull() {
+        currentUser = null;
     }
 
     public static void setCurrentUser(User currentUser) {

@@ -11,8 +11,8 @@ import java.util.Scanner;
 
 @Component
 public class UserInterface {
-
     private User currentUser;
+
     private final ToDoesRepository toDoesRepository;
     private final UsersRepository usersRepository;
 
@@ -22,7 +22,7 @@ public class UserInterface {
     }
 
     public void printUserInterface() {
-        System.out.println("1. Войти\n2. Зарегистрироваться\n3. Список пользователей");
+        System.out.println("1. Войти\n2. Зарегистрироваться\n3. Список пользователей\n4. Завершить приложение");
     }
 
     public void insertCommand(Scanner scanner) throws SQLException {
@@ -37,6 +37,10 @@ public class UserInterface {
                 break;
             case "3":
                 findAllUsers().forEach(System.out::println);
+                break;
+            case "4":
+                System.out.println("GoodBye...");
+                System.exit(0);
                 break;
             default:
                 System.out.println("Введите число от 1 до 2х");
