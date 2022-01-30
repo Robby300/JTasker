@@ -3,6 +3,7 @@ package ru.jtasker.ui;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.jtasker.domain.ToDo;
+import ru.jtasker.domain.User;
 import ru.jtasker.repository.ToDoesRepository;
 import ru.jtasker.repository.UsersRepository;
 
@@ -22,70 +23,65 @@ public class UserInterface {
         this.usersRepository = usersRepository;
     }
 
-    public void printConsoleInterface() {
-        System.out.println("1. Создать таску\n2. Посмотреть незавершённые таски\n3. Посмотреть завершённые таски\n4. Выход");
+    public void printUserInterface() {
+        System.out.println("1. Войти\n2. Зарегистрироваться\n3. Список пользователей");
     }
 
-    public void insertCommandForRegisteredUser(Scanner scanner) throws SQLException {
+    public void insertCommand(Scanner scanner) throws SQLException {
         String command = scanner.nextLine();
 
         switch (command) {
             case "1":
-                createAndSaveToDo(scanner);
+                createAndSaveUser(scanner);
                 break;
             case "2":
-                System.out.println("Ваши незавершённые задачи:");
-                toDoesRepository.findAllNotFinishedTasksByUserId(1L).forEach(System.out::println);
+                enterUser(scanner);
                 break;
             case "3":
-                System.out.println("Ваши завершённые задачи:");
-                toDoesRepository.findAllFinishedTasksByUserId(1L);
-                break;
-            case "4":
-                System.out.println("GoodBye...");
-                System.exit(0);
+                System.out.println("Список зарегистрированных пользователей:");
+                usersRepository.findAll().forEach(System.out::println);
                 break;
             default:
-                System.out.println("Введите число от 1 до 4х");
+                System.out.println("Введите число от 1 до 2х");
                 break;
         }
     }
 
-    private void createAndSaveToDo(Scanner scanner) throws SQLException {
-        System.out.println("Вы выбрали создание задачи:");
-        System.out.println("Введите наименование задачи:");
-        String name = scanner.nextLine();
-        System.out.println("Введите содержание задачи:");
+    private void createAndSaveUser(Scanner scanner) throws SQLException {
+        System.out.println("Вы выбрали регистрацию пользователя:");
 
-        String description = scanner.nextLine();
-        System.out.println("Введите дедлайн задачи:");
+        System.out.println("Введите имя пользователя");
+        String userName = scanner.nextLine();
 
-        System.out.println("год YYYY:");
-        int year = Integer.parseInt(scanner.nextLine());
+        System.out.println("Введите пароль");
+        String password = scanner.nextLine();
 
-        System.out.println("месяц mm:");
-        int month = Integer.parseInt(scanner.nextLine());
+        System.out.println("Введите почту");
+        String email = scanner.nextLine();
 
-        System.out.println("день месяца dd:");
-        int day = Integer.parseInt(scanner.nextLine());
-
-        System.out.println("час hh:");
-        int hour = Integer.parseInt(scanner.nextLine());
-
-        System.out.println("минут mm:");
-        int minute = Integer.parseInt(scanner.nextLine());
-
-        LocalDateTime deadline = LocalDateTime.of(year, month, day, hour, minute);
-
-        ToDo toDo = new ToDo.Builder()
-                .name(name)
-                .description(description)
-                .createdOn(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                .isDone(false)
-                .deadline(deadline)
+        User user = new User.Builder()
+                .userName(userName)
+                .password(password)
+                .email(email)
                 .build();
 
-        toDoesRepository.save(toDo);
-        System.out.println("Задача успешно сохранена!");
+        usersRepository.save(user);
+        System.out.println("Регистрация успешно завершена.");
+    }
+
+    private void enterUser(Scanner scanner){
+        User currentUser;
+        System.out.println("Произведите вход:");
+
+        System.out.println("Введите имя пользователя");
+        String userName = scanner.nextLine();
+
+        System.out.println("Введите пароль");
+        String password = scanner.nextLine();
+
+        currentUser = usersRepository.findUserbyUserNameAndPassword(userName, password);
+        if (currentUser == null) {
+            System.out.println("Неверное имя пользователя или пароль.");
+        } else System.out.println("Здравствуйте " + currentUser.getUserName());
     }
 }

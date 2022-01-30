@@ -21,4 +21,14 @@ public class UsersRepositoryImpl implements UsersRepository {
     public User save(User user) {
         return null;
     }
+
+    @Override
+    public Iterable<Object> findAll() {
+        return null;
+    }
+
+    @Override
+    public User findUserbyUserNameAndPassword(String userName, String password) {
+        return null;
+    }
 }
