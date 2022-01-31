@@ -28,7 +28,7 @@ public class ToDosRepositoryImpl implements ToDosRepository {
             "WHERE id = ?";
     private static final String SET_TODO_DONE = "UPDATE todos SET is_done = true WHERE id = ?";
     private static final String UPDATE_TODO = "UPDATE todos SET " +
-            "name = ?, description = ?, deadline = ?, is_notified = false, WHERE id = ?";
+            "name = ?, description = ?, deadline = ?, is_notified = false WHERE id = ?";
     private static final String FIND_ALL_NOT_FINISHED_AND_NOT_NOTIFIED_BY_USER_ID = "SELECT * FROM todos " +
             "WHERE user_id = ? AND is_done = false AND is_notified = false";
     private static final String SET_NOTIFIED_TRUE = "UPDATE todos SET is_notified = true WHERE id = ?";
@@ -36,7 +36,7 @@ public class ToDosRepositoryImpl implements ToDosRepository {
     private final Connection connection;
     private final ToDoMapper toDoMapper;
     private final UsersRepository usersRepository;
-    
+
     public ToDosRepositoryImpl(Connection connection, ToDoMapper toDoMapper, UsersRepository usersRepository) {
         this.connection = connection;
         this.toDoMapper = toDoMapper;

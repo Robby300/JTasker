@@ -73,10 +73,10 @@ public class ToDoServiceImpl implements ToDoService {
                 .deadline((LocalDateTime) toDoParts[2])
                 .build();
         try {
-            System.out.println(toDosRepository.save(toDo));
+            toDosRepository.save(toDo);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Ошибка сохранения пользователя.");
+            System.err.println("Ошибка сохранения задачи.");
         }
         System.out.println("Задача успешно сохранена!");
     }

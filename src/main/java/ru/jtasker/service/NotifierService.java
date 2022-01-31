@@ -24,7 +24,7 @@ public class NotifierService {
                 LocalDateTime now = LocalDateTime.now();
                 LocalDateTime notifyTime = todo.getDeadline().minusHours(1);
                 if (now.isAfter(notifyTime)) {
-                    System.err.println("Дедлайн вашей задачи через час!");
+                    System.err.println("Дедлайн вашей задачи наступит в течение часа!");
                     System.err.println(todo);
                     toDoService.setToDoNotified(todo.getId());
                 }

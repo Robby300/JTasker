@@ -1,6 +1,7 @@
 package ru.jtasker.domain;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class ToDo {
@@ -13,6 +14,8 @@ public class ToDo {
     private boolean isDone;
     private boolean isNotified;
     private Long parentToDoId;
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:dd");
 
     public ToDo() {
     }
@@ -165,15 +168,13 @@ public class ToDo {
 
     @Override
     public String toString() {
-        return "ToDo{" +
-                "id= " + id +
-                ", userId= " + userId +
-                ", name= " + name +
-                ", description= " + description +
-                ", createdOn= " + createdOn +
-                ", deadline= " + deadline +
-                ", isDone= " + isDone +
-                ", parentToDoId= " + parentToDoId +
-                '}';
+        return "задача " +
+                "id = " + id +
+                ", имя задачи - " + name +
+                ", содержание: " + description +
+                ", создана - " + createdOn.format(formatter) +
+                ", дэдлайн - " + deadline.format(formatter) +
+                ", выполнение: " + (isDone() ? "выполнена" : "не выполнена") +
+                ", родительская задача - " + (parentToDoId == 0 ? "отсутствует" : "id = " + parentToDoId);
     }
 }

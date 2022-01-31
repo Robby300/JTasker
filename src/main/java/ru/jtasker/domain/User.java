@@ -48,7 +48,6 @@ public class User {
         }
     }
 
-
     public long getId() {
         return id;
     }
@@ -83,12 +82,12 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userName=" + userName +
-                ", password=" + password +
-                ", email=" + email +
-                '}';
+        return "Пользователь " +
+                "id= " + id +
+                ", Имя: " + userName
+                //", password=" + password +
+                //", email=" + email +
+                ;
     }
 }
 

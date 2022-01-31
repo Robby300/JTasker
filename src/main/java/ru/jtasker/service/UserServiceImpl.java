@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.jtasker.domain.User;
 import ru.jtasker.repository.UsersRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -42,7 +43,12 @@ public class UserServiceImpl implements UserService {
                 .password(password)
                 .email(email)
                 .build();
-        System.out.println(usersRepository.save(user));
+        try {
+            usersRepository.save(user);
+        }
+        catch (Exception e) {
+            System.err.println("Ошибка регистрации пользователя.");
+        }
         System.out.println("Регистрация успешно завершена.");
     }
 
