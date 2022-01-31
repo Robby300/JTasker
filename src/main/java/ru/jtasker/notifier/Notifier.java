@@ -26,7 +26,7 @@ public class Notifier extends Thread {
         while (true) {
 
             if (userService.getCurrentUser() != null) {
-                System.err.println("Нотифайер заметил логин");
+                //System.err.println("Нотифайер заметил логин");
                 long userId = userService.getCurrentUser().getId();
                 List<ToDo> toDos = toDoService.findAllNotFinishedTasksByUserId(userId);
                 for (ToDo todo : toDos) {
@@ -38,6 +38,11 @@ public class Notifier extends Thread {
                         System.out.println(todo);
                     }
                 }
+            }
+            try {
+                Thread.sleep(30_000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

@@ -22,6 +22,7 @@ public class Application {
         ToDoInterface ti = context.getBean(ToDoInterface.class);
         Notifier notifier = context.getBean(Notifier.class);
         UserService userService = context.getBean(UserService.class);
+
         System.out.println("JTasker app has started.");
         notifier.start();
         while (true) {
