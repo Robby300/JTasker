@@ -1,6 +1,7 @@
 package ru.jtasker.domain;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class ToDo {
@@ -11,7 +12,10 @@ public class ToDo {
     private LocalDateTime createdOn;
     private LocalDateTime deadline;
     private boolean isDone;
+    private boolean isNotified;
     private Long parentToDoId;
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:dd");
 
     public ToDo() {
     }
@@ -24,11 +28,12 @@ public class ToDo {
         this.createdOn = builder.createdOn;
         this.deadline = builder.deadline;
         this.isDone = builder.isDone;
+        this.isNotified = builder.isNotified;
         this.parentToDoId = builder.parentToDoId;
     }
 
-    public static class Builder {
 
+    public static class Builder {
         private long id;
         private long userId;
         private String name;
@@ -36,6 +41,7 @@ public class ToDo {
         private LocalDateTime createdOn;
         private LocalDateTime deadline;
         private boolean isDone;
+        public boolean isNotified;
         private Long parentToDoId;
 
         public Builder id(long id) {
@@ -70,6 +76,11 @@ public class ToDo {
 
         public Builder isDone(Boolean isDone) {
             this.isDone = isDone;
+            return this;
+        }
+
+        public Builder isNotified(Boolean isNotified) {
+            this.isNotified = isNotified;
             return this;
         }
 
@@ -147,17 +158,23 @@ public class ToDo {
         this.parentToDoId = parentToDoId;
     }
 
+    public boolean isNotified() {
+        return isNotified;
+    }
+
+    public void setNotified(boolean notified) {
+        isNotified = notified;
+    }
+
     @Override
     public String toString() {
-        return "ToDo{" +
-                "id= " + id +
-                ", userId= " + userId +
-                ", name= " + name +
-                ", description= " + description +
-                ", createdOn= " + createdOn +
-                ", deadline= " + deadline +
-                ", isDone= " + isDone +
-                ", parentToDoId= " + parentToDoId +
-                '}';
+        return "задача " +
+                "id = " + id +
+                ", имя задачи - " + name +
+                ", содержание: " + description +
+                ", создана - " + createdOn.format(formatter) +
+                ", дэдлайн - " + deadline.format(formatter) +
+                ", выполнение: " + (isDone() ? "выполнена" : "не выполнена") +
+                ", родительская задача - " + (parentToDoId == 0 ? "отсутствует" : "id = " + parentToDoId);
     }
 }

@@ -43,6 +43,11 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     @Override
+    public void setToDoNotified(long id) {
+        toDosRepository.setToDoNotified(id);
+    }
+
+    @Override
     public void editToDo(Scanner scanner, ToDo toDo) {
         System.out.println("Вы выбрали редактирование задачи:");
         System.out.println("Введите новое наименование задачи:");
@@ -68,10 +73,10 @@ public class ToDoServiceImpl implements ToDoService {
                 .deadline((LocalDateTime) toDoParts[2])
                 .build();
         try {
-            System.out.println(toDosRepository.save(toDo));
+            toDosRepository.save(toDo);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Ошибка сохранения пользователя.");
+            System.err.println("Ошибка сохранения задачи.");
         }
         System.out.println("Задача успешно сохранена!");
     }
@@ -79,6 +84,11 @@ public class ToDoServiceImpl implements ToDoService {
     @Override
     public List<ToDo> findAllNotFinishedTasksByUserId(long userId) {
         return toDosRepository.findAllNotFinishedTasksByUserId(userId);
+    }
+
+    @Override
+    public List<ToDo> findAllNotFinishedAndNotNotifiedTasksByUserId(long userId) {
+        return toDosRepository.findAllNotFinishedAndNotNotifiedTasksByUserId(userId);
     }
 
     @Override

@@ -17,10 +17,10 @@ public class UserMapper {
             user.setPassword(resultSet.getString("password"));
             user.setEmail(resultSet.getString("email"));
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("Ошибка маппера пользователя");
+            //e.printStackTrace();
+            System.err.println("Неверное имя пользователя или пароль");
+            return null;
         }
-
         return user;
     }
 }
