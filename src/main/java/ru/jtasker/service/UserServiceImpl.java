@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
         if (usersRepository.findUser(user)) {
             currentUser = user;
             System.out.println("Здравствуйте " + currentUser.getUserName());
-        }
+        } else System.err.println("Неверные логин или пароль.");
     }
 
     @Override

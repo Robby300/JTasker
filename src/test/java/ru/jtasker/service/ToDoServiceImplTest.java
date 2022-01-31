@@ -35,7 +35,7 @@ class ToDoServiceImplTest {
             .parentToDoId(3L)
             .build();
 
-    public ToDo findByIdAndUserId(Long id, Long userId) {}
+    //public ToDo findByIdAndUserId(Long id, Long userId) {}
 
         @Test
     void returnedToDoByIdAndUserIdIsCorrect() {
@@ -43,6 +43,7 @@ class ToDoServiceImplTest {
 
         ToDo toDo = toDoService.findByIdAndUserId(1L, 2L);
         assertFalse(toDo == null);
+
         assertThat(toDo.getId(), equalTo(1L));
         assertThat(toDo.getName(), equalTo("testToDo"));
         assertThat(toDo.getDescription(), equalTo("toDosDescription"));

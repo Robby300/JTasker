@@ -6,6 +6,7 @@ import ru.jtasker.service.ToDoService;
 import ru.jtasker.service.UserService;
 
 import java.sql.SQLException;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
@@ -48,6 +49,7 @@ public class ToDoInterface {
             case "1" -> {
                 System.out.println("Редактор задачи:");
                 toDoService.editToDo(currentToDo);
+                System.out.println(getUpdatedToDo(currentToDo));
             }
             case "2" -> {
                 System.out.println("Создание вложенной задачи:");
@@ -65,7 +67,7 @@ public class ToDoInterface {
             case "5" -> {
                 System.out.println("Отметка о выполнении");
                 toDoService.toDoDone(currentToDo.getId());
-                System.out.println(currentToDo);
+                System.out.println(getUpdatedToDo(currentToDo));
             }
             case "6" -> {
                 System.out.println("Возврат в предыдущее меню");
@@ -74,6 +76,10 @@ public class ToDoInterface {
             }
             default -> System.out.println("Введите число от 1 до 6");
         }
+    }
+
+    private ToDo getUpdatedToDo(ToDo currentToDo) {
+        return toDoService.findByIdAndUserId(currentToDo.getId(), userService.getCurrentUser().getId());
     }
 
     public void insertCommandForRegisteredUser(Scanner scanner) throws SQLException {
@@ -93,11 +99,8 @@ public class ToDoInterface {
                 toDoService.findAllFinishedTasksByUserId(userId).forEach(System.out::println);
             }
             case "4" -> {
-                System.out.println("Введите ID Задачи");
-                ToDo currentToDo = toDoService.findByIdAndUserId(Long.parseLong(scanner.nextLine()), userId);
-                System.out.println(currentToDo);
-                printToDoInterface();
-                insertCommandForCurrentToDo(scanner, currentToDo);
+                openMenuByToDoId(scanner, userId);
+
             }
             case "5" -> {
                 System.out.println("Возврат в основное меню");
@@ -106,6 +109,18 @@ public class ToDoInterface {
                 userInterface.insertCommand(scanner);
             }
             default -> System.out.println("Введите число от 1 до 5");
+        }
+    }
+
+    private void openMenuByToDoId(Scanner scanner, long userId) {
+        try {
+            System.out.println("Введите ID Задачи");
+            ToDo currentToDo = toDoService.findByIdAndUserId(Long.parseLong(scanner.nextLine()), userId);
+            System.out.println(currentToDo);
+            printToDoInterface();
+            insertCommandForCurrentToDo(scanner, currentToDo);
+        } catch (Exception e) {
+            openMenuByToDoId(scanner, userId);
         }
     }
 
@@ -124,6 +139,7 @@ public class ToDoInterface {
                 .build();
         return toDo;
     }
+
     public Object[] createAndGetToDoParts(Scanner scanner) {
         Object[] toDoParts = new Object[3];
         System.out.println("Введите имя задачи:");
@@ -133,19 +149,30 @@ public class ToDoInterface {
         String description = scanner.nextLine();
         toDoParts[1] = description;
         System.out.println("Введите дедлайн задачи:");
-        System.out.println("год YYYY:");
-        int year = Integer.parseInt(scanner.nextLine());
-        System.out.println("месяц mm:");
-        int month = Integer.parseInt(scanner.nextLine());
-        System.out.println("день месяца dd:");
-        int day = Integer.parseInt(scanner.nextLine());
-        System.out.println("час hh:");
-        int hour = Integer.parseInt(scanner.nextLine());
-        System.out.println("минут mm:");
-        int minute = Integer.parseInt(scanner.nextLine());
-        LocalDateTime deadline = LocalDateTime.of(year, month, day, hour, minute);
+        LocalDateTime deadline = getLocalDateTime(scanner);
         toDoParts[2] = deadline;
         return toDoParts;
+    }
+
+    private LocalDateTime getLocalDateTime(Scanner scanner) {
+        LocalDateTime deadline = null;
+        try {
+            System.out.println("год YYYY:");
+            int year = Integer.parseInt(scanner.nextLine());
+            System.out.println("месяц mm:");
+            int month = Integer.parseInt(scanner.nextLine());
+            System.out.println("день месяца dd:");
+            int day = Integer.parseInt(scanner.nextLine());
+            System.out.println("час hh:");
+            int hour = Integer.parseInt(scanner.nextLine());
+            System.out.println("минут mm:");
+            int minute = Integer.parseInt(scanner.nextLine());
+            deadline = LocalDateTime.of(year, month, day, hour, minute);
+        } catch (NumberFormatException | DateTimeException e) {
+            System.err.println("Неверный формат даты, повторите ввод.");
+            return getLocalDateTime(scanner);
+        }
+        return deadline;
     }
 }
 

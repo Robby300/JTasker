@@ -126,9 +126,9 @@ public class ToDosRepositoryImpl implements ToDosRepository {
             preparedStatement.setString(2, String.valueOf(userId));
             ResultSet resultSet = preparedStatement.executeQuery();
             todo = toDoMapper.toModel(resultSet);
+            resultSet.close();
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Такой задачи нет.");
+            System.err.println("Задачи с заданным ID не существует.");
         }
         return todo;
     }
@@ -152,6 +152,6 @@ public class ToDosRepositoryImpl implements ToDosRepository {
     public void deleteToDo(long id) {
         if (showInnersToDo(id).size() == 0) {
             queryById(id, DELETE_BY_ID);
-        } else System.err.println("В данной задаче имеются вложенные задачи.");
+        } else System.err.println("В данной задаче имеются вложенные незавершённые задачи.");
     }
 }

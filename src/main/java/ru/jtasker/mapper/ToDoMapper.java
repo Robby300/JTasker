@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 @Component
 public class ToDoMapper {
 
-    public ToDo toModel(ResultSet resultSet) {
+    public ToDo toModel(ResultSet resultSet) throws SQLException {
         ToDo todo = new ToDo();
 
-        try {
             todo.setId(resultSet.getLong("id"));
             todo.setUserId(resultSet.getLong("user_id"));
             todo.setName(resultSet.getString("name"));
@@ -22,11 +21,7 @@ public class ToDoMapper {
             todo.setDeadline(LocalDateTime.parse(resultSet.getString("deadline")));
             todo.setDone(resultSet.getBoolean("is_done"));
             todo.setNotified(resultSet.getBoolean("is_notified"));
-            todo.setParentToDoId(resultSet.getLong("parent_todo"));
-        } catch (SQLException e) {
-            //e.printStackTrace();
-            System.err.println("Ошибка маппера задачи");
-        }
+
         return todo;
     }
 }
