@@ -3,6 +3,7 @@ package ru.jtasker.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 @Configuration
+@EnableScheduling
 @ComponentScan("ru.jtasker")
 public class AppConfig {
 
@@ -22,7 +24,7 @@ public class AppConfig {
     private static final String CREATE_TODOS_TABLE = "CREATE TABLE IF NOT EXISTS todos(" +
             "id INTEGER PRIMARY KEY, user_id BIGINT, name VARCHAR(255) NOT NULL," +
             "description VARCHAR(255) NOT NULL, created_on DATETIME, deadline DATETIME," +
-            "is_done BOOLEAN, parent_todo BIGINT, FOREIGN KEY (user_id) REFERENCES users(id))";
+            "is_done BOOLEAN, is_notified BOOLEAN, parent_todo BIGINT, FOREIGN KEY (user_id) REFERENCES users(id))";
 
     @Bean
     public Connection connection() throws SQLException {

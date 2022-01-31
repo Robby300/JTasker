@@ -22,4 +22,8 @@ public interface ToDosRepository {
     ToDo editToDo(ToDo toDo);
 
     List<ToDo> showInnersToDo(long id);
+
+    List<ToDo> findAllNotFinishedAndNotNotifiedTasksByUserId(long userId);
+
+    void setToDoNotified(long id);
 }

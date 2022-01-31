@@ -11,8 +11,10 @@ public interface ToDoService {
     void createAndSaveToDo(Scanner scanner, long id);
     void deleteToDo(long id);
     void toDoDone(long id);
+    void setToDoNotified(long id);
     void editToDo(Scanner scanner, ToDo currentToDo);
     List<ToDo> findAllNotFinishedTasksByUserId(long userId);
+    List<ToDo> findAllNotFinishedAndNotNotifiedTasksByUserId(long userId);
     List<ToDo> findAllFinishedTasksByUserId(long userId);
     List<ToDo> showInnersToDo(long id);
     ToDo findByIdAndUserId(long todoId, long userId);

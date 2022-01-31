@@ -21,6 +21,7 @@ public class ToDoMapper {
             todo.setCreatedOn(LocalDateTime.parse(resultSet.getString("created_on")));
             todo.setDeadline(LocalDateTime.parse(resultSet.getString("deadline")));
             todo.setDone(resultSet.getBoolean("is_done"));
+            todo.setDone(resultSet.getBoolean("is_notified"));
             todo.setParentToDoId(resultSet.getLong("parent_todo"));
         } catch (SQLException e) {
             e.printStackTrace();

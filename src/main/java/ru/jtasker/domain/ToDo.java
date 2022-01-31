@@ -11,6 +11,7 @@ public class ToDo {
     private LocalDateTime createdOn;
     private LocalDateTime deadline;
     private boolean isDone;
+    private boolean isNotified;
     private Long parentToDoId;
 
     public ToDo() {
@@ -24,11 +25,12 @@ public class ToDo {
         this.createdOn = builder.createdOn;
         this.deadline = builder.deadline;
         this.isDone = builder.isDone;
+        this.isNotified = builder.isNotified;
         this.parentToDoId = builder.parentToDoId;
     }
 
-    public static class Builder {
 
+    public static class Builder {
         private long id;
         private long userId;
         private String name;
@@ -36,6 +38,7 @@ public class ToDo {
         private LocalDateTime createdOn;
         private LocalDateTime deadline;
         private boolean isDone;
+        public boolean isNotified;
         private Long parentToDoId;
 
         public Builder id(long id) {
@@ -70,6 +73,11 @@ public class ToDo {
 
         public Builder isDone(Boolean isDone) {
             this.isDone = isDone;
+            return this;
+        }
+
+        public Builder isNotified(Boolean isNotified) {
+            this.isNotified = isNotified;
             return this;
         }
 
@@ -145,6 +153,14 @@ public class ToDo {
 
     public void setParentToDoId(Long parentToDoId) {
         this.parentToDoId = parentToDoId;
+    }
+
+    public boolean isNotified() {
+        return isNotified;
+    }
+
+    public void setNotified(boolean notified) {
+        isNotified = notified;
     }
 
     @Override

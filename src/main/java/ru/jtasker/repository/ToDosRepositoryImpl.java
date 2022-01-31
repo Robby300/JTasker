@@ -15,7 +15,7 @@ import java.util.List;
 public class ToDosRepositoryImpl implements ToDosRepository {
     // SQL
     private static final String INSERT_TODO = "INSERT INTO todos(" +
-            "user_id, name, description, created_on, deadline, parent_todo, is_done) VALUES (?, ?, ?, ?, ?, ?, false)";
+            "user_id, name, description, created_on, deadline, parent_todo, is_notified,is_done) VALUES (?, ?, ?, ?, ?, ?, false, false)";
     private static final String FIND_ALL_BY_PARENT_TODO_ID = "SELECT * FROM todos " +
             "WHERE parent_todo = ?";
     private static final String FIND_ALL_NOT_FINISHED_BY_USER_ID = "SELECT * FROM todos " +
@@ -29,6 +29,9 @@ public class ToDosRepositoryImpl implements ToDosRepository {
     private static final String SET_TODO_DONE = "UPDATE todos SET is_done = true WHERE id = ?";
     private static final String UPDATE_TODO = "UPDATE todos SET " +
             "name = ?, description = ?, deadline = ? WHERE id = ?";
+    private static final String FIND_ALL_NOT_FINISHED_AND_NOT_NOTIFIED_BY_USER_ID = "SELECT * FROM todos " +
+            "WHERE user_id = ? AND is_done = false AND is_notified = false";
+    private static final String SET_NOTIFIED_TRUE = "UPDATE todos SET is_notified = true WHERE id = ?";
 
     private final Connection connection;
     private final ToDoMapper toDoMapper;
@@ -85,15 +88,22 @@ public class ToDosRepositoryImpl implements ToDosRepository {
             e.printStackTrace();
             System.err.println("Ошибка запроса списка задач");
         }
-        if (todos.size() == 0) {
-            System.out.println("Список задач пуст");
-        }
         return todos;
     }
 
     @Override
     public List<ToDo> showInnersToDo(long parenId) {
         return getToDos(parenId, FIND_ALL_BY_PARENT_TODO_ID);
+    }
+
+    @Override
+    public List<ToDo> findAllNotFinishedAndNotNotifiedTasksByUserId(long userId) {
+        return getToDos(userId, FIND_ALL_NOT_FINISHED_AND_NOT_NOTIFIED_BY_USER_ID);
+    }
+
+    @Override
+    public void setToDoNotified(long id) {
+        queryById(id, SET_NOTIFIED_TRUE);
     }
 
     @Override
