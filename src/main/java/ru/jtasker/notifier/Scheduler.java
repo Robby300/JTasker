@@ -13,7 +13,7 @@ public class Scheduler {
         this.notifierService = notifierService;
     }
 
-    @Scheduled(fixedRate = 30_000)
+    @Scheduled(fixedRate = 10_000)
     public void sendNotification() {
         notifierService.notifyBeforeOneHour();
     }
