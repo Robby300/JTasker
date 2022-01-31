@@ -20,6 +20,8 @@ public class UsersRepositoryImpl implements UsersRepository {
     private static final String INSERT_USER = "INSERT INTO users(" +
             "username, password) VALUES (?, ?)";
     private static final String FIND_ALL = "SELECT * FROM users ";
+    private static final String FIND_BY_NAME = "SELECT * FROM users" +
+            " WHERE username = ?";
 
     public UsersRepositoryImpl(Connection connection, UserMapper userMapper) {
         this.connection = connection;
@@ -53,7 +55,15 @@ public class UsersRepositoryImpl implements UsersRepository {
     }
 
     @Override
-    public boolean findUser(User user) {
-        return findAll().contains(user);
+    public User findUser(String userName) {
+        User user = new User();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME)) {
+            preparedStatement.setString(1, userName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            user = userMapper.toModel(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }

@@ -9,5 +9,5 @@ public interface UsersRepository {
 
     List<User> findAll();
 
-    boolean findUser(User user);
+    public User findUser(String userName);
 }

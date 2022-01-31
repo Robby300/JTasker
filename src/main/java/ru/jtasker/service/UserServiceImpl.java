@@ -18,8 +18,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void loginUser(User user) {
-        if (usersRepository.findUser(user)) {
-            currentUser = user;
+        if (usersRepository.findUser(user.getUserName()).getPassword().equals(user.getPassword())) {
+            currentUser = usersRepository.findUser(user.getUserName());
             System.out.println("Здравствуйте " + currentUser.getUserName());
         } else System.err.println("Неверные логин или пароль.");
     }

@@ -1,34 +1,54 @@
 package ru.jtasker.service;
 
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.jtasker.domain.User;
-import ru.jtasker.repository.UsersRepository;
 
-@ExtendWith(MockitoExtension.class)
-class UserServiceImplTest {
-    @Mock
-    UsersRepository usersRepository;
+import java.util.List;
 
-    @InjectMocks
-    UserServiceImpl userService;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-    public User returnUser = new User.Builder()
-            .id(1L)
-            .userName("Oleg")
-            .password("123")
-            .build();
+@DisplayName("UserService tests")
+class UserServiceImplTest extends AbstractServiceTest {
 
-    /*@Test
-    void returnedUserByIdIsCorrect() {
-        when(usersRepository.findUser()).thenReturn(returnUser);
+    @Autowired
+    UserService userService;
 
-        User user = userService.loginUser();
-        assertFalse(user == null);
-        assertThat(user.getId(), equalTo(1L));
-        assertThat(user.getUsername(), equalTo("Oleg"));
-        assertThat(user.getPassword(), equalTo("123"));
-    }*/
+    @Test
+    @DisplayName("loginUser() should login user successfully")
+    void shouldLoginUserSuccessfully() {
+        User user = new User();
+        user.setUserName("Ivan");
+        user.setPassword("123");
+
+        userService.loginUser(user);
+        user = userService.getCurrentUser();
+
+        assertNotNull(user);
+        assertThat(user.getId(), is(1L));
+        assertThat(user.getUserName(), is("Ivan"));
+        assertThat(user.getPassword(), is("123"));
+    }
+
+    @Test
+    @DisplayName("findAllUsers() should return a List with two users")
+    void shouldReturnListWithTwoUsers() {
+        User user = new User();
+        user.setUserName("Semen");
+        user.setPassword("321");
+
+        userService.saveUser(user);
+        List<User> allUsers = userService.findAllUsers();
+
+        assertNotNull(allUsers);
+        assertFalse(allUsers.isEmpty());
+        assertThat(allUsers.size(), is(2));
+        assertThat(allUsers.get(1).getId(), is(2L));
+        assertThat(allUsers.get(1).getUserName(), is("Semen"));
+        assertThat(allUsers.get(1).getPassword(), is("321"));
+    }
 }
