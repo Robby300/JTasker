@@ -9,9 +9,5 @@ public interface UsersRepository {
 
     List<User> findAll();
 
-    User findCurrentUserByUserNameAndPassword(String userName, String password);
-
-    User getCurrentUser();
-
-    void setCurrentUserToNull();
+    boolean findUser(User user);
 }

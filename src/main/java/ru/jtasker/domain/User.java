@@ -4,7 +4,6 @@ public class User {
     private long id;
     private String userName;
     private String password;
-    private String email;
 
     public User() {
     }
@@ -13,7 +12,6 @@ public class User {
         this.id = builder.id;
         this.userName = builder.userName;
         this.password = builder.password;
-        this.email = builder.email;
     }
 
     public static class Builder {
@@ -35,11 +33,6 @@ public class User {
 
         public Builder password(String password) {
             this.password = password;
-            return this;
-        }
-
-        public Builder email(String email) {
-            this.email = email;
             return this;
         }
 
@@ -72,12 +65,12 @@ public class User {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getUserName().equals(user.getUserName()) && getPassword().equals(user.getPassword());
     }
 
     @Override

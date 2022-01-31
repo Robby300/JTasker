@@ -3,6 +3,7 @@ package ru.jtasker.repository;
 import org.springframework.stereotype.Repository;
 import ru.jtasker.domain.ToDo;
 import ru.jtasker.mapper.ToDoMapper;
+import ru.jtasker.service.UserService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,18 +36,19 @@ public class ToDosRepositoryImpl implements ToDosRepository {
 
     private final Connection connection;
     private final ToDoMapper toDoMapper;
-    private final UsersRepository usersRepository;
+    private final UserService userService;
 
-    public ToDosRepositoryImpl(Connection connection, ToDoMapper toDoMapper, UsersRepository usersRepository) {
+    public ToDosRepositoryImpl(Connection connection, ToDoMapper toDoMapper, UserService userService) {
         this.connection = connection;
         this.toDoMapper = toDoMapper;
-        this.usersRepository = usersRepository;
+
+        this.userService = userService;
     }
 
     @Override
     public ToDo save(ToDo toDo) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_TODO)) {
-            preparedStatement.setLong(1, usersRepository.getCurrentUser().getId());
+            preparedStatement.setLong(1, userService.getCurrentUser().getId());
             preparedStatement.setString(2, toDo.getName());
             preparedStatement.setString(3, toDo.getDescription());
             preparedStatement.setString(4, toDo.getCreatedOn().toString());

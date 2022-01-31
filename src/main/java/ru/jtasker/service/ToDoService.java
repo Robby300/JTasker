@@ -3,16 +3,16 @@ package ru.jtasker.service;
 import org.springframework.stereotype.Service;
 import ru.jtasker.domain.ToDo;
 
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
 @Service
 public interface ToDoService {
-    void createAndSaveToDo(Scanner scanner, long id);
+    void saveToDo(ToDo toDo) throws SQLException;
     void deleteToDo(long id);
     void toDoDone(long id);
     void setToDoNotified(long id);
-    void editToDo(Scanner scanner, ToDo currentToDo);
+    void editToDo(ToDo currentToDo);
     List<ToDo> findAllNotFinishedTasksByUserId(long userId);
     List<ToDo> findAllNotFinishedAndNotNotifiedTasksByUserId(long userId);
     List<ToDo> findAllFinishedTasksByUserId(long userId);

@@ -6,6 +6,8 @@ import ru.jtasker.service.ToDoService;
 import ru.jtasker.service.UserService;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 @Component
@@ -45,12 +47,12 @@ public class ToDoInterface {
         switch (command) {
             case "1" -> {
                 System.out.println("Редактор задачи:");
-                toDoService.editToDo(scanner, currentToDo);
+                toDoService.editToDo(currentToDo);
             }
             case "2" -> {
                 System.out.println("Создание вложенной задачи:");
                 System.out.println(currentToDo);
-                toDoService.createAndSaveToDo(scanner, currentToDo.getId());
+                toDoService.saveToDo(createToDo(scanner, currentToDo.getId()));
             }
             case "3" -> {
                 System.out.println("Все вложенные незавершённые задачи:");
@@ -80,7 +82,7 @@ public class ToDoInterface {
         switch (command) {
             case "1" -> {
                 System.out.println("Создание задачи:");
-                toDoService.createAndSaveToDo(scanner, 0);
+                toDoService.saveToDo(createToDo(scanner, 0));
             }
             case "2" -> {
                 System.out.println("Ваши незавершённые задачи:");
@@ -105,6 +107,45 @@ public class ToDoInterface {
             }
             default -> System.out.println("Введите число от 1 до 5");
         }
+    }
+
+    public ToDo createToDo(Scanner scanner, long parentId) {
+        long userId = userService.getCurrentUser().getId();
+        System.out.println("Вы выбрали создание задачи:");
+        Object[] toDoParts = createAndGetToDoParts(scanner);
+        ToDo toDo = new ToDo.Builder()
+                .name((String) toDoParts[0])
+                .userId(userId)
+                .parentToDoId(parentId)
+                .description((String) toDoParts[1])
+                .createdOn(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                .isDone(false)
+                .deadline((LocalDateTime) toDoParts[2])
+                .build();
+        return toDo;
+    }
+    public Object[] createAndGetToDoParts(Scanner scanner) {
+        Object[] toDoParts = new Object[3];
+        System.out.println("Введите имя задачи:");
+        String name = scanner.nextLine();
+        toDoParts[0] = name;
+        System.out.println("Введите содержание задачи:");
+        String description = scanner.nextLine();
+        toDoParts[1] = description;
+        System.out.println("Введите дедлайн задачи:");
+        System.out.println("год YYYY:");
+        int year = Integer.parseInt(scanner.nextLine());
+        System.out.println("месяц mm:");
+        int month = Integer.parseInt(scanner.nextLine());
+        System.out.println("день месяца dd:");
+        int day = Integer.parseInt(scanner.nextLine());
+        System.out.println("час hh:");
+        int hour = Integer.parseInt(scanner.nextLine());
+        System.out.println("минут mm:");
+        int minute = Integer.parseInt(scanner.nextLine());
+        LocalDateTime deadline = LocalDateTime.of(year, month, day, hour, minute);
+        toDoParts[2] = deadline;
+        return toDoParts;
     }
 }
 

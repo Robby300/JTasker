@@ -15,7 +15,6 @@ public class UserMapper {
             user.setId(resultSet.getInt("id"));
             user.setUserName(resultSet.getString("username"));
             user.setPassword(resultSet.getString("password"));
-            user.setEmail(resultSet.getString("email"));
         } catch (SQLException e) {
             //e.printStackTrace();
             System.err.println("Неверное имя пользователя или пароль");
