@@ -3,6 +3,7 @@ package ru.jtasker.repository;
 import org.springframework.stereotype.Repository;
 import ru.jtasker.domain.ToDo;
 import ru.jtasker.mapper.ToDoMapper;
+import ru.jtasker.service.UserService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,18 +36,19 @@ public class ToDosRepositoryImpl implements ToDosRepository {
 
     private final Connection connection;
     private final ToDoMapper toDoMapper;
-    private final UsersRepository usersRepository;
+    private final UserService userService;
 
-    public ToDosRepositoryImpl(Connection connection, ToDoMapper toDoMapper, UsersRepository usersRepository) {
+    public ToDosRepositoryImpl(Connection connection, ToDoMapper toDoMapper, UserService userService) {
         this.connection = connection;
         this.toDoMapper = toDoMapper;
-        this.usersRepository = usersRepository;
+
+        this.userService = userService;
     }
 
     @Override
     public ToDo save(ToDo toDo) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_TODO)) {
-            preparedStatement.setLong(1, usersRepository.getCurrentUser().getId());
+            preparedStatement.setLong(1, userService.getCurrentUser().getId());
             preparedStatement.setString(2, toDo.getName());
             preparedStatement.setString(3, toDo.getDescription());
             preparedStatement.setString(4, toDo.getCreatedOn().toString());
@@ -124,9 +126,9 @@ public class ToDosRepositoryImpl implements ToDosRepository {
             preparedStatement.setString(2, String.valueOf(userId));
             ResultSet resultSet = preparedStatement.executeQuery();
             todo = toDoMapper.toModel(resultSet);
+            resultSet.close();
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Такой задачи нет.");
+            System.err.println("Задачи с заданным ID не существует.");
         }
         return todo;
     }
@@ -150,6 +152,6 @@ public class ToDosRepositoryImpl implements ToDosRepository {
     public void deleteToDo(long id) {
         if (showInnersToDo(id).size() == 0) {
             queryById(id, DELETE_BY_ID);
-        } else System.err.println("В данной задаче имеются вложенные задачи.");
+        } else System.err.println("В данной задаче имеются вложенные незавершённые задачи.");
     }
 }

@@ -13,7 +13,7 @@ public class ToDo {
     private LocalDateTime deadline;
     private boolean isDone;
     private boolean isNotified;
-    private Long parentToDoId;
+    private long parentToDoId;
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:dd");
 

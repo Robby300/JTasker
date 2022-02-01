@@ -18,8 +18,7 @@ public class AppConfig {
     private static final String DB_URL = "jdbc:sqlite:memory:testdb";
 
     private static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS users " +
-            "(id INTEGER PRIMARY KEY, username VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255)," +
-            " email VARCHAR(255) UNIQUE)";
+            "(id INTEGER PRIMARY KEY, username VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255))";
 
     private static final String CREATE_TODOS_TABLE = "CREATE TABLE IF NOT EXISTS todos(" +
             "id INTEGER PRIMARY KEY, user_id BIGINT NOT NULL , name VARCHAR(255) NOT NULL," +

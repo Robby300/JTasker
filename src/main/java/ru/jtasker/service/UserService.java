@@ -4,17 +4,18 @@ import org.springframework.stereotype.Service;
 import ru.jtasker.domain.User;
 
 import java.util.List;
-import java.util.Scanner;
 
 @Service
 public interface UserService {
-    void loginUser(Scanner scanner);
+    void loginUser(User user);
 
-    void createAndSaveUser(Scanner scanner);
+    void saveUser(User user);
 
     List<User> findAllUsers();
 
     User getCurrentUser();
 
     void setCurrentUserToNull();
+
+    boolean currentUserIsLogin();
 }
