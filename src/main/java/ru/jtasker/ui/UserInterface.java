@@ -59,7 +59,6 @@ public class UserInterface {
         String userName = scanner.nextLine();
         System.out.println("Введите пароль");
         String password = scanner.nextLine();
-
         User user = new User.Builder()
                 .userName(userName)
                 .password(password)
